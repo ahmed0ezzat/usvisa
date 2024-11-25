@@ -1,0 +1,108 @@
+@use '~@angular/material' as mat;
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$usvisa-primary: mat.define-palette(mat.$indigo-palette);
+$usvisa-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$usvisa-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$usvisa-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $usvisa-primary,
+      accent: $usvisa-accent,
+      warn: $usvisa-warn,
+    ),
+  )
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($usvisa-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #eee;
+}
+.bx--row {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+.mat-card-header-text {
+  margin: 0 auto !important;
+}
+.title {
+  display: block;
+  padding-bottom: 16px;
+}
+.sub-title {
+  display: block;
+  padding-bottom: 15px;
+}
+
+.application-form {
+  mat-form-field {
+    width: 100%;
+}
+  .section {
+      margin: 15px 0px;
+
+      .selection-label {
+          display: block;
+      }
+      mat-radio-group {
+          mat-radio-button {
+              margin-right: 10px;
+              padding: 8px 0px;
+          }
+      }
+  }
+}
+h1, h2, h3, h4, h5 {
+  font-family: 'Oswald', sans-serif !important; 
+  font-weight: 300 !important;
+}
+
+mat-card-title {
+  font-family: 'Oswald', sans-serif !important; 
+  font-weight: 300 !important;
+  font-size: 25px !important;
+}
+.mat-snack-bar-container {
+  margin-top: 101px !important; 
+}
+
+.mat-expansion-indicator::after {
+  color: rgba($color: #fff, $alpha: 0.3) !important;
+}
+.mat-expansion-panel-body {
+  padding:0 !important
+}
+.customTooltip {
+  display: block;
+  font-size: 14px!important;
+  padding: 24px!important;
+  width: 500px;
+}

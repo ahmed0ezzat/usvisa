@@ -1,0 +1,18 @@
+<div [formGroup]="tripInformationTab">
+  <div>
+    <span class="sub-title"> {{'TRIP INFORMATION 1/2' | translate}} </span>
+
+    <h1>{{'Past Travel & Applications' | translate}}</h1>
+
+    <app-past-travel-applications
+      [isSubmit]="isSubmit"
+    ></app-past-travel-applications>
+  </div>
+
+  <div>
+    <br />
+    <span class="sub-title"> {{'TRIP INFORMATION 2/2' | translate}} </span>
+    <h1>{{'Upcoming Trip To The U.S.' | translate}}</h1>
+    <app-upcomming-trip [isSubmit]="isSubmit"></app-upcomming-trip>
+  </div>
+</div>

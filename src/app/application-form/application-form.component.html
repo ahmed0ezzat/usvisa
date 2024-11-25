@@ -1,0 +1,55 @@
+<div class="container application-form">
+  <h1 *ngIf='visaType'>{{ visaType }} {{'Visa Application' | translate}}</h1>
+  <p class="form_header">{{'Please Fill In The Required Fields Denoted By' | translate}} (*)</p>
+  <div [formGroup]="mainTab" style="width: 100%; min-height: 70vh">
+    <mat-vertical-stepper [linear]="isLinear" #stepper (selectionChange)='scrollTop()'>
+      <mat-step formGroupName="infoTab" [stepControl]="mainTab.get('infoTab')" (click)='scrollTop()'>
+        <ng-template matStepLabel>{{'Basic info' | translate}}</ng-template>
+        <app-basic-info></app-basic-info>
+        <div>
+          <button mat-button (click)='next("infoTab")'>{{'Next' |translate}}</button>
+        </div>
+      </mat-step>
+
+      <mat-step formGroupName="tripInfoTab" [stepControl]="mainTab.get('tripInfoTab')" (click)='scrollTop()'>
+        <ng-template matStepLabel>{{'Trip information' | translate}}</ng-template>
+        <app-trip-information></app-trip-information>
+        <div>
+          <button mat-button matStepperPrevious>{{'Back' |translate}}</button>
+          <button mat-button (click)='next("tripInfoTab")'>{{'Next' |translate}}</button>
+        </div>
+      </mat-step>
+
+      <mat-step formGroupName="additionalDetailsTab" [stepControl]="mainTab.get('additionalDetailsTab')" (click)='scrollTop()'>
+        <ng-template matStepLabel>{{'Additional Details' | translate}}</ng-template>
+        <app-additional-details></app-additional-details>
+        <div>
+          <button mat-button matStepperPrevious>{{'Back' |translate}}</button>
+          <button mat-button (click)='next("additionalDetailsTab")'>{{'Next' |translate}}</button>
+        </div>
+      </mat-step>
+
+      <mat-step formGroupName="securityTab" [stepControl]="mainTab.get('securityTab')" (click)='scrollTop()'>
+        <ng-template matStepLabel>{{'Security and Background' | translate}}</ng-template>
+        <app-security></app-security>
+        <div>
+          <button mat-button matStepperPrevious>{{'Back' |translate}}</button>
+          <button mat-button (click)='next("securityTab")'>{{'Next' |translate}}</button>
+        </div>
+      </mat-step>
+
+      <mat-step formGroupName="formAuthorizationTab" [stepControl]="mainTab.get('formAuthorizationTab')" (click)='scrollTop()'>
+        <ng-template matStepLabel>{{'Payment information' | translate}}</ng-template>
+        <app-form-authorization></app-form-authorization>
+        <div>
+          <button mat-button matStepperPrevious>{{'Back' |translate}}</button>
+          <button mat-raised-button color="primary" (click)='next("submit")'>{{submitBtn}}</button>
+        </div>
+      </mat-step>
+    </mat-vertical-stepper>
+  </div>
+</div>
+<div class="spinner-overlay" *ngIf="isSubmitPay">
+  <mat-progress-spinner class="example-margin" [color]="'color'" [mode]="mode" [value]="value">
+  </mat-progress-spinner>
+</div>

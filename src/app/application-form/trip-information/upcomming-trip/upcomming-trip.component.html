@@ -1,0 +1,482 @@
+<div [formGroup]="tripInfoTab">
+  <section class="section">
+    <mat-form-field>
+      <mat-select formControlName="purposeOfTrip" placeholder="{{'Purpose of Trip to the U.S.' | translate}}" required>
+        <mat-option *ngFor="let item of purposeOfTripArray" [value]="item.val">
+          {{ item.val }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <section class="section">
+    <mat-form-field>
+      <mat-select formControlName="specify" placeholder="{{'Specify' | translate}}" required>
+        <mat-option [value]="spec.val" *ngFor="let spec of specifyArray">
+          {{ spec.val }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <section class="section">
+    <label class="selection-label">{{'Have you made specific travel plans?' | translate}} </label>
+    <mat-radio-group formControlName="haveTravelPlans">
+      <mat-radio-button class="example-margin" value="yes" (click)="onChangeHaveTravelPlans()">{{'Yes' | translate}}
+      </mat-radio-button>
+      <mat-radio-button class="example-margin" value="no" (click)="onChangeHaveTravelPlans()">{{'No' | translate}}
+      </mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && tripInfoTab.get('haveTravelPlans').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <mat-form-field class="example-full-width" *ngIf="tripInfoTab.get('haveTravelPlans').value === 'no'">
+    <input required placeholder="{{'Intended Date of Arrival' | translate}}" formControlName="intendedDate" matInput
+      [matDatepickerFilter]="myFilter" [matDatepicker]="picker" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker> </mat-datepicker>
+  </mat-form-field>
+
+  <p *ngIf="tripInfoTab.get('haveTravelPlans').value === 'yes'">
+    Provide a complete itinerary for your travel to the U.S.
+  </p>
+
+  <mat-form-field style="width: 50%" *ngIf="tripInfoTab.get('haveTravelPlans').value == 'no'">
+    <input type="number" matInput formControlName="intendedNumber"
+      placeholder="{{'Intended Length of Stay in U.S.' | translate}}" required />
+    <mat-error *ngIf="tripInfoTab.get('intendedNumber').invalid">
+      {{'Must be greater than 0' | translate}}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field style="width: 50%" *ngIf="tripInfoTab.get('haveTravelPlans').value === 'no'">
+    <mat-select formControlName="intendedDuration" required placeholder="{{'Select Duration' | translate}}">
+      <mat-option *ngFor="let time of tripTimeArray" [value]="time.val">
+        {{ time.val }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <ng-container *ngIf="tripInfoTab.get('haveTravelPlans').value === 'yes'">
+    <mat-form-field>
+      <input placeholder="{{'Date of Arrival in U.S' | translate}}" formControlName="dateOfArrival" matInput
+        [matDatepickerFilter]="myFilter" [matDatepicker]="picker" required />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker> </mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input placeholder="{{'Date of Departure from U.S' | translate}}" formControlName="dateOfDeparture" matInput
+        [matDatepickerFilter]="myFilter" [matDatepicker]="picker2" required />
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2> </mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input formControlName="arrivalFlight" matInput placeholder="{{'Arrival Flight (if known)' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input formControlName="arrivalCity" matInput placeholder="{{'Arrival City' | translate}}" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input formControlName="departureFlight" matInput placeholder="{{'Departure Flight (if known)' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input formControlName="departureCity" matInput placeholder="{{'Departure City' | translate}}" required />
+    </mat-form-field>
+
+    <div style="background-color: #f5f5f5;padding: 15px;margin-bottom: 24px;">
+      <span class="title" style="text-transform: uppercase;">
+        {{'Provide the locations you plan to visit in the U.S' | translate}}
+      </span>
+      <div *ngFor="let row of travelPlansArray?.controls; let index = index" style="position: relative; ">
+        <mat-form-field>
+          <input [formControl]="row.get('planLocation')" matInput placeholder="{{'Location' | translate}}" required />
+        </mat-form-field>
+
+        <ng-container *ngIf="travelPlansArray?.controls.length > 1">
+          <button mat-icon-button (click)="onChangeTravelPlans(false, index)" style="position: absolute;right:0;top:0;z-index: 1000;">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </ng-container>
+      </div>
+      <button mat-stroked-button (click)="onChangeTravelPlans(true, null)">
+        {{'Add Another' | translate}}
+      </button>
+    </div>
+  </ng-container>
+  <div style="background-color: #f5f5f5;padding: 15px;margin-bottom: 24px;">
+    <span class="title" style="text-transform: uppercase;">
+      {{'Address Where You Will Stay in the U.S.' | translate}}
+    </span>
+
+    <mat-form-field>
+      <input formControlName="willStayStreetAddress1" matInput placeholder="{{'Street Address (line 1)' | translate}}"
+        required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input formControlName="willStayStreetAddress2" matInput
+        placeholder="{{'Street Address (line 2)' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input formControlName="willStayCity" matInput placeholder="{{'City' | translate}}" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select formControlName="willStayState" matInput placeholder="{{'State' | translate}}" required>
+        <mat-option *ngFor='let state of stateList' [value]='state.name'>{{ state.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input formControlName="willStayZIP" matInput placeholder="{{'ZIP Code (if known)' | translate}}" />
+    </mat-form-field>
+  </div>
+
+  <section class="section">
+    <label class="selection-label">{{'Who is your contact organization or person in United States?' | translate}}
+    </label>
+    <mat-radio-group formControlName="contactOrganizationOrPerson">
+      <mat-radio-button class="example-margin" value="Contact Person" (click)="onChangeOrganization('Contact Person')">
+        {{'Contact Person' | translate}}
+      </mat-radio-button>
+      <mat-radio-button class="example-margin" value="Organization" (click)="onChangeOrganization('Organization')">
+        {{'Organization' | translate}}
+      </mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && tripInfoTab.get('contactOrganizationOrPerson').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <mat-form-field *ngIf="tripInfoTab.get('contactOrganizationOrPerson').value === 'Contact Person'">
+    <input matInput formControlName="contactPerson_name" placeholder="{{'Contact Person Given Names' | translate}}"
+      required />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="tripInfoTab.get('contactOrganizationOrPerson').value === 'Contact Person'">
+    <input matInput formControlName="contactPerson_surname" placeholder="{{'Contact Person Surnames' | translate}}"
+      required />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="tripInfoTab.get('contactOrganizationOrPerson').value === 'Organization'">
+    <input matInput formControlName="organizationName" placeholder="{{'Organization Name' | translate}}" required />
+  </mat-form-field>
+
+  <section class="section">
+    <mat-form-field>
+      <mat-select formControlName="relationship" placeholder="{{'Relationship' | translate}}" required>
+        <mat-option [value]="relation.val" *ngFor="let relation of relationshipsArray">
+          {{ relation.val }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <mat-form-field>
+    <input matInput formControlName="upcommingEmail" placeholder="{{'Email' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="upcommingPhone" placeholder="{{'Phone' | translate}}" required />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="streetAddress" placeholder="{{'Street Address' | translate}}" required />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="upcommingCity" placeholder="{{'City' | translate }}" required />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="Apartment" placeholder="{{'Apartment/Suite/Unit Number' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="zip_postalCode" placeholder="{{'ZIP or Postal Code' | translate}}" />
+  </mat-form-field>
+
+  <section class="section">
+    <mat-form-field>
+      <mat-select matInput formControlName="state" placeholder="{{'State' | translate}}" required>
+        <mat-option [value]="state.name" *ngFor="let state of stateList">
+          {{ state.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <section class="section">
+    <mat-form-field>
+      <mat-select (selectionChange)="changeTripSponsor($event.value)" formControlName="tripSponsor"
+        placeholder="{{'Person/Entity Paying for Your Trip' | translate}}" required>
+        <mat-option [value]="relation.val" *ngFor="let relation of relationsArray">
+          {{ relation.val }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <mat-form-field *ngIf="tripInfoTab.get('tripSponsor').value === 'Other Person'">
+    <mat-label>{{'Given Names of Person Paying for Trip' | translate}}</mat-label>
+    <input matInput formControlName="payingPersonGivenNames" placeholder="{{'(e.g., JUAN MIGUEL)' | translate}}"
+      required />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="tripInfoTab.get('tripSponsor').value === 'Other Person'">
+    <mat-label>{{'Surnames of Person Paying for Trip' | translate}}</mat-label>
+    <input matInput formControlName="payingPersonSurnames" placeholder="{{'(e.g., FERNANDEZ GARCIA)' | translate}}"
+      required />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="tripInfoTab.get('tripSponsor').value === 'Other Company / Organization'">
+    <input matInput formControlName="payingCompanyName"
+      placeholder="{{'Name of Company/Organization Paying for Trip' | translate}}" required />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="tripInfoTab.get('tripSponsor').value === 'Other Company / Organization'">
+    <input matInput formControlName="payingCompanyRelationship" placeholder="{{'Relationship To You' | translate}}"
+      required />
+  </mat-form-field>
+
+  <section class="section" *ngIf="tripInfoTab.get('tripSponsor').value === 'Other Person'">
+    <mat-form-field>
+      <mat-select formControlName="payingPersonRelationship" placeholder="{{'Relationship To You' | translate}}"
+        required>
+        <mat-option [value]="relation.val" *ngFor="let relation of relationshipsArray">
+          {{ relation.val }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <mat-form-field *ngIf="tripInfoTab.get('tripSponsor').value === 'Other Person'">
+    <input matInput formControlName="payingPersonEmail" placeholder="{{'Email' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="
+      tripInfoTab.get('tripSponsor').value === 'Other Company / Organization' ||
+      tripInfoTab.get('tripSponsor').value === 'Other Person'">
+    <input matInput formControlName="payingPhone" placeholder="{{'Phone' | translate}}" required />
+  </mat-form-field>
+
+  <section class="section" *ngIf="tripInfoTab.get('tripSponsor').value === 'Other Person'">
+    <label class="selection-label">
+      {{'Is the address of the party paying for your trip the same as your Home or Mailing Address?' | translate}}
+    </label>
+    <mat-radio-group formControlName="isAddressParty">
+      <mat-radio-button class="example-margin" value="yes" (click)="onChangeIsPartyAddress(true)">{{'Yes' | translate}}
+      </mat-radio-button>
+      <mat-radio-button class="example-margin" value="no" (click)="onChangeIsPartyAddress(false)">{{'No' | translate}}
+      </mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && tripInfoTab.get('isAddressParty').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <!---------------------------------
+          TRIP PAYER ADDRESS
+  ----------------------------------->
+  <section style="background-color: #f5f5f5;padding: 15px;margin-bottom: 24px;" *ngIf=" 
+      tripInfoTab.get('isAddressParty').value == 'no' ||
+      tripInfoTab.get('tripSponsor').value === 'Other Company / Organization'">
+
+    <span class="title" style="text-transform: uppercase;padding-bottom: 16px;">
+      {{'Address of The Trip Payer' | translate}}
+    </span>
+
+    <mat-form-field>
+      <input matInput formControlName="isAddressStreet" placeholder="{{'Street Address (Line 1)' | translate}}"
+        required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput formControlName="isAddressStreet2" placeholder="{{'Street Address (Line 1)' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput formControlName="isAddressCity" placeholder="{{'City' | translate }}" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput formControlName="isAddressZIP" placeholder="{{'Postal Zone/ZIP Code' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput formControlName="isAddressState" placeholder="{{'State' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select formControlName="isAddressCountry" placeholder="{{'Country' | translate}}" required>
+        <mat-option [value]="country.name" *ngFor="let country of payerCountryList">
+          {{ country.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+  </section>
+  <!-- END OF TRIP PAYER ADDRESS -->
+
+  <section class="section">
+    <label class="selection-label">{{'Is anyone going to be traveling with you?' | translate}}
+    </label>
+    <mat-radio-group formControlName="travelWithYou" (change)="onChangeTravelWithYou()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}} </mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && tripInfoTab.get('travelWithYou').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <section class="section" *ngIf='tripInfoTab.get("travelWithYou").value === "yes"'>
+    <label class="selection-label">
+      {{'Are you traveling as part of a group?' | translate}}
+    </label>
+    <mat-radio-group formControlName="travelAsAGroup" (change)='travelAsAGroupChanged($event)'>
+      <mat-radio-button class="example-margin" value="yes" (change)="onChangeTravelAsAGroup(true)">{{'Yes' | translate}}
+      </mat-radio-button>
+      <mat-radio-button class="example-margin" value="no" (change)="onChangeTravelAsAGroup(false)">{{'No' | translate}}
+      </mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && tripInfoTab.get('travelAsAGroup').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <mat-form-field *ngIf="tripInfoTab.get('travelAsAGroup').value === 'yes'">
+    <mat-label>{{ 'Enter the name of the group you are travelling with' | translate }}</mat-label>
+    <input matInput formControlName="groupName" placeholder="{{'Group Name' | translate}}" required />
+  </mat-form-field>
+
+  <div *ngIf="tripInfoTab.get('travelAsAGroup').value === 'no'">
+    <div *ngFor="let row of travelWithYouArray?.controls; let index = index">
+      <mat-form-field>
+        <input [formControl]="row.get('travelWithName')" matInput
+          placeholder="{{'Given Name (e.g., JUAN MIGUEL)' | translate}}" required />
+      </mat-form-field>
+
+      <mat-form-field>
+        <input [formControl]="row.get('travelWithSurname')" matInput
+          placeholder="{{'Surname (e.g., FERNANDEZ GARCIA)' | translate}}" required />
+      </mat-form-field>
+
+      <section class="section">
+        <mat-form-field>
+          <mat-select [formControl]="row.get('travelWithRelation')" placeholder="{{'Relationship' | translate}}"
+            required>
+            <mat-option [value]="relation.val" *ngFor="let relation of relationshipsArray">
+              {{ relation.val }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
+      <div *ngIf="travelWithYouArray?.controls.length > 1">
+        <button mat-button (click)="onChangeAddInfo(false, index)">
+          {{'Remove' | translate}} -
+        </button>
+      </div>
+    </div>
+    <div>
+      <button mat-button (click)="onChangeAddInfo(true, null)">{{'Add' | translate}} +</button>
+    </div>
+  </div>
+
+  <section class="section">
+    <label class="selection-label">{{'Do you know where you will be staying?' | translate}}
+    </label>
+    <mat-radio-group formControlName="knowWhereStaying">
+      <mat-radio-button class="example-margin" value="yes" (click)="onChangeKnowWhereStaying('yes')">{{'Yes' |
+        translate}}
+      </mat-radio-button>
+      <mat-radio-button class="example-margin" value="no" (click)="onChangeKnowWhereStaying('no')">{{'No' | translate}}
+      </mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && tripInfoTab.get('knowWhereStaying').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <p *ngIf="tripInfoTab.get('knowWhereStaying').value == 'no'">
+    {{'Please enter the state and city you will be staying and select a hotel in
+    the intended area of stay. This may be changed later.' | translate}}
+  </p>
+
+  <p *ngIf="tripInfoTab.get('knowWhereStaying').value === 'yes'">
+    {{'Name of the hotel or name of the person that you are staying with' | translate}}
+  </p>
+  <div *ngIf="tripInfoTab.get('knowWhereStaying').value === 'no'">
+    <mat-form-field>
+      <input matInput formControlName="cityStaying" placeholder="{{'City' | translate }}" required />
+    </mat-form-field>
+
+    <section class="section">
+      <mat-form-field>
+        <mat-select matInput formControlName="stateStaying" placeholder="{{'State' | translate}}" required>
+          <mat-option [value]="state.name" *ngFor="let state of stateArray">
+            {{ state.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    <mat-form-field>
+      <input matInput formControlName="hotelName" placeholder="{{'Hotel name' | translate}}" required />
+    </mat-form-field>
+  </div>
+  <div *ngIf="tripInfoTab.get('knowWhereStaying').value === 'yes'">
+    <mat-form-field>
+      <input matInput formControlName="hotelName" placeholder="{{'Hotel name' | translate}}" required />
+    </mat-form-field>
+    <section class="section">
+      <mat-form-field>
+        <mat-select formControlName="stayingWithRelation" placeholder="{{'Relationship' | translate}}" required>
+          <mat-option [value]="relation.val" *ngFor="let relation of relationshipsArray">
+            {{ relation.val }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    <mat-form-field>
+      <input matInput formControlName="stayingWithEmail" placeholder="{{'Email' | translate}}" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput formControlName="stayingWithPhone" placeholder="{{'Phone' | translate}}" required />
+    </mat-form-field>
+  </div>
+
+
+  <div *ngIf="tripInfoTab.get('knowWhereStaying').value === 'yes'" class="button-wrapper">
+    <button mat-button class="copy-button" (click)="copyButton()">
+      {{'COPY FROM CONTACT ORGANIZATION FORM' | translate}}
+    </button>
+  </div>
+
+  <mat-form-field *ngIf="tripInfoTab.get('knowWhereStaying').value === 'yes'">
+    <input matInput formControlName="stayingWithStreetAddress" placeholder="{{'Street Address' | translate}}"
+      required />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="tripInfoTab.get('knowWhereStaying').value === 'yes'">
+    <input matInput formControlName="stayingWithApartment" placeholder="{{'Apartment/Suite/Unit Number' | translate}}"
+      required />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="tripInfoTab.get('knowWhereStaying').value === 'yes'">
+    <input matInput formControlName="stayingWithZIPcode" placeholder="{{'ZIP or Postal Code' | translate}}" required />
+  </mat-form-field>
+
+
+</div>

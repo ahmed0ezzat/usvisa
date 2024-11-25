@@ -1,0 +1,42 @@
+<div [formGroup]="additionalDetailsTab">
+    <div>
+        <span class="title">
+            {{"ADDITIONAL DETAILS 1/2" | translate}}
+        </span>
+        <h1>
+            {{"Additional Questions" | translate}}
+        </h1>
+        <app-additional-questions [isSubmit]="isSubmit"></app-additional-questions>
+    </div>
+
+    <div>
+        <br>
+        <span class="title">
+           {{"ADDITIONAL DETAILS 2/2" | translate}}
+        </span>
+        <h1>
+            {{"Passport Information" | translate}}
+        </h1>
+        <app-passport-information [isSubmit]="isSubmit"></app-passport-information>
+    </div>
+
+    <div *ngIf="visaType === 'student'">
+        <br>
+        <h1>
+           {{"SEVIS Information" | translate}}
+        </h1>
+        <app-sevis-information [isSubmit]="isSubmit"></app-sevis-information>
+    </div>
+
+    <div *ngIf="visaType === 'student'">
+        <br>
+        <h1>
+            {{"Additional Point Of Contact Information" | translate}}
+        </h1>
+        <app-additional-point-of-contact-information [isSubmit]="isSubmit"></app-additional-point-of-contact-information>
+    </div>
+    
+    <div>
+        <p>{{"You are now done." | translate}}</p>
+    </div>
+</div>

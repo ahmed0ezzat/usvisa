@@ -1,0 +1,198 @@
+<div [formGroup]="basicInfoTab">
+  <mat-form-field>
+    <mat-label>{{'Father Given Name (e.g., JUAN MIGUEL)' | translate}}</mat-label>
+    <input matInput formControlName="fatherGivenName"
+      placeholder="{{'Father Given Name (e.g., JUAN MIGUEL)' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'Father Surname (e.g., FERNANDEZ GARCIA)' | translate}}</mat-label>
+    <input matInput formControlName="fatherLastName"
+      placeholder="{{'Father Surname (e.g., FERNANDEZ GARCIA)' | translate}}" />
+  </mat-form-field>
+
+  <!-- <section class="section">
+    <label class="selection-label">{{'Do you know your father date of birth?' | translate}}
+    </label>
+    <mat-radio-group formControlName="haveFatherDateOfBirth" (change)="onChangeFatherDateOfBirth()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && basicInfoTab.get('haveFatherDateOfBirth').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section> -->
+
+  <mat-form-field class="example-full-width">
+    <mat-label>{{'Father Date Of Birth' | translate}}</mat-label>
+    <input 
+      (dateChange)="validateDateTime('fatherDateOfBirth')" 
+      formControlName="fatherDateOfBirth" 
+      matInput
+      [matDatepicker]="picker" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker> </mat-datepicker>
+    <mat-error *ngIf="basicInfoTab.get('fatherDateOfBirth').invalid">
+      {{'Date cannot be equal or later than today' | translate}}
+    </mat-error>
+  </mat-form-field>
+
+  <section class="section">
+    <label class="selection-label">{{'Is your father currently in the United States?' | translate}} *
+    </label>
+    <mat-radio-group formControlName="isFatherInUSA" (change)="onChangeIsFatherInUSA()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && basicInfoTab.get('isFatherInUSA').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="basicInfoTab.get('isFatherInUSA').value === 'yes'">
+    <mat-form-field>
+      <mat-label>{{'US Citizen Status' | translate}}</mat-label>
+      <mat-select formControlName="fatherUSCitizenStatus" required>
+        <mat-option *ngFor="let country of USCitizenStatus" [value]="country.val">{{ country.val }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field>
+    <mat-label>{{'Mother Given Name (e.g., JUAN MIGUEL)' | translate}}</mat-label>
+    <input matInput formControlName="motherGivenName"
+      placeholder="{{'Mother Given Name (e.g., JUAN MIGUEL)' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'Mother Sur Name (Last Name)' | translate}}</mat-label>
+    <input matInput formControlName="motherSurName" placeholder="{{'Mother Sur Name (Last Name)' | translate}}" />
+  </mat-form-field>
+
+  <!-- <section class="section">
+    <label class="selection-label">{{'Do you know your mother date of birth?' | translate}}
+    </label>
+    <mat-radio-group formControlName="haveMotherDateOfBirth" (change)="onChangeMotherDateOfBirth()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && basicInfoTab.get('haveMotherDateOfBirth').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+ -->
+  <mat-form-field class="example-full-width">
+    <mat-label>{{'Mother Date Of Birth' | translate}}</mat-label>
+    <input (dateChange)="validateDateTime('motherDateOfBirth')" formControlName="motherDateOfBirth" matInput
+      [matDatepicker]="motherDateOfBirthPicker" />
+    <mat-datepicker-toggle matSuffix [for]="motherDateOfBirthPicker"></mat-datepicker-toggle>
+    <mat-datepicker #motherDateOfBirthPicker> </mat-datepicker>
+    <mat-error *ngIf="basicInfoTab.get('motherDateOfBirth').invalid">
+      {{'Date cannot be equal or later than today' | translate}}
+    </mat-error>
+  </mat-form-field>
+
+  <section class="section">
+    <label class="selection-label">{{'Is your mother currently in the United States?' | translate}} *
+    </label>
+    <mat-radio-group formControlName="isMotherInUSA" (change)="onChangeIsMotherInUSA()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && basicInfoTab.get('isMotherInUSA').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="basicInfoTab.get('isMotherInUSA').value === 'yes'">
+    <mat-form-field>
+      <mat-label>{{'US Citizen Status' | translate}}</mat-label>
+      <mat-select formControlName="motherUSCitizenStatus">
+        <mat-option *ngFor="let country of USCitizenStatus" [value]="country.val">{{ country.val }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <section class="section">
+    <label class="selection-label">
+      {{'Do you currently have any immediate relatives in the United States?' | translate}} *
+    </label>
+    <mat-radio-group formControlName="isMotherHaveImmediateRelativesInUSA"
+      (change)="onChangeIsMotherHaveImmediateRelativesInUSA()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && basicInfoTab.get('isMotherHaveImmediateRelativesInUSA').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="basicInfoTab.get('isMotherHaveImmediateRelativesInUSA').value === 'yes'">
+    <div *ngFor="let row of basicInfoRelatives?.controls; let index = index">
+      <mat-form-field>
+        <mat-label>{{'Given Name (e.g., JUAN MIGUEL)' | translate}}</mat-label>
+        <input matInput required [formControl]="row.get('motherRelativeGivenName')"
+          placeholder="{{'Given Name (e.g., JUAN MIGUEL)' | translate}}" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{'Sur Name (Last Name)' | translate}}</mat-label>
+        <input matInput required [formControl]="row.get('motherRelativeSurName')"
+          placeholder="{{'Sur Name (Last Name)' | translate}}" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{'Relationship' | translate}}</mat-label>
+        <mat-select [formControl]="row.get('motherRelativeRelation')">
+          <mat-option *ngFor="let relation of relationships" [value]="relation.val">{{ relation.val }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{'US Citizen Status' | translate}}</mat-label>
+        <mat-select [formControl]="row.get('motherRelativeUSCitizenStatus')">
+          <mat-option *ngFor="let country of USCitizenStatus" [value]="country.val">{{ country.val }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{'Telephone' | translate}}</mat-label>
+        <input matInput [formControl]="row.get('motherRelativeTelephone')" placeholder="{{'Telephone' | translate}}"
+          required />
+      </mat-form-field>
+
+      <div *ngIf="basicInfoRelatives?.controls.length > 1">
+        <button mat-button (click)="onChangeAddInfo(false, index)">
+          {{'Remove' | translate}} -
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <button mat-button (click)="onChangeAddInfo(true, null)">{{'Add' | translate}} +</button>
+    </div>
+  </div>
+
+  <section class="section">
+    <label class="selection-label">
+      {{'Do you have any other relatives in the United States?' | translate}} *
+    </label>
+    <mat-radio-group formControlName="isMotherHaveOtherRelativesInUSA"
+      (change)="onChangeIsMotherHaveOtherRelativesInUSA()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="
+        isSubmit && basicInfoTab.get('isMotherHaveOtherRelativesInUSA').invalid
+      ">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="basicInfoTab.get('isMotherHaveOtherRelativesInUSA').value === 'yes'">
+    <mat-form-field>
+      <mat-label>{{'Please Explain' | translate}}</mat-label>
+      <input matInput formControlName="explainOtherRelations" placeholder="{{'Please Explain' | translate}}" />
+    </mat-form-field>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<div [formGroup]="basicInfoTab">
+  <mat-form-field>
+    <mat-label>{{'Country/Region of Origin (Nationality)' | translate}}</mat-label>
+    <mat-select formControlName="nationality" required>
+      <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <section class="section">
+    <label class="selection-label">
+      {{'Do you hold any nationality other than the one you listed previously in this form?' | translate}}
+    </label>
+    <mat-radio-group formControlName="isOtherNationality" (change)="onChangeIsOtherNationality()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && basicInfoTab.get('isOtherNationality').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="basicInfoTab.get('isOtherNationality').value === 'yes'">
+    <div *ngFor="let row of additionalNationality?.controls; let index = index">
+
+      <mat-form-field>
+        <mat-label>{{'Other Country/Region of Origin (Nationality)' | translate}}</mat-label>
+        <mat-select [formControl]="row.get('additionalCountryName')" required>
+          <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{'Passport Number' | translate}}</mat-label>
+        <input matInput [formControl]="row.get('additionalPassportNumber')" placeholder="{{'Passport Number' | translate}}" />
+      </mat-form-field>
+
+      <div *ngIf="additionalNationality?.controls.length > 1">
+        <button mat-button (click)="onChangeAdditionalNationalities(false,index)">
+          {{'Remove' | translate}} -
+        </button>
+      </div>
+    </div>
+    <div>
+      <button mat-button (click)="onChangeAdditionalNationalities(true,null)">
+        {{'Add' | translate}} +
+      </button>
+    </div>
+  </div>
+
+  <section class="section">
+    <label class="selection-label">{{'Are you a resident of a country other than the one you listed as your
+      nationality?' | translate}}
+    </label>
+    <mat-radio-group formControlName="isOtherResidentCountry" (change)="onChangeOtherResidentCountry()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && basicInfoTab.get('isOtherResidentCountry').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="basicInfoTab.get('isOtherResidentCountry').value === 'yes'">
+    <mat-form-field>
+      <mat-label>{{'Other Permanent Resident Country/Region' | translate}}</mat-label>
+      <mat-select formControlName="residentCountryName" multiple>
+        <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field>
+    <mat-label>{{'National Identification Number' | translate}}</mat-label>
+    <input matInput formControlName="nationalIdentificationNumber" placeholder="{{'National Identification Number' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'U.S. Social Security Number' | translate}}</mat-label>
+    <input matInput formControlName="socialSecurityNumber" placeholder="{{'U.S. Social Security Number' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'U.S. Taxpayer ID Number' | translate}}</mat-label>
+    <input matInput formControlName="taxpayerID" placeholder="{{'U.S. Taxpayer ID Number' | translate}}" />
+  </mat-form-field>
+</div>

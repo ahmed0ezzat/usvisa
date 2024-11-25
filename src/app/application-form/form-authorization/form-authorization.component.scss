@@ -1,0 +1,17 @@
+.section-title {
+    text-transform: uppercase;
+    padding-bottom: 15px;
+}
+.summary {
+    margin:20px 0px;
+
+    h2 {
+        border-bottom: 1px solid #eee;
+    }
+    .summary-details {
+        span {
+            min-width: 35%;
+            display: inline-block;
+        }
+    }
+}

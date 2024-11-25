@@ -1,0 +1,67 @@
+.faq-page {
+    position: relative;
+    padding: 84px 32px 32px 32px;
+    // background-image: url(../../assets/img/flag.jpg);
+    // background-repeat: no-repeat;
+    // background-size: cover;
+    // color: rgba(0, 0, 0, 0.7);
+    background-color: #002868;
+    color: rgba(255, 255, 255, 0.7);
+
+    .section-header {
+        position: relative;
+        text-align: center;
+        padding: 64px 0 32px 0;
+        z-index: 1;
+        h1 {
+            text-transform: uppercase;
+            font-size: 30px;
+        }
+    }
+
+    .content {
+        padding: 32px 0;
+        position: relative;
+        z-index: 1;
+        
+        mat-accordion {
+            mat-expansion-panel {
+                box-shadow: none !important;
+                border-radius: 0;
+                padding: 0;
+                background-color: #002868;
+                color: rgba(255, 255, 255, 0.5);
+
+                p {
+                    margin-block-start: 0 !important;
+                    font-size: 16px;
+                    line-height: 200%;
+                }
+
+                mat-expansion-panel-header {
+                    background-color: #002868;
+                    border-radius: 0;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                    padding: 16px 32px 16px 0;
+
+                    mat-panel-title {
+                        font-size: 16px;
+                        color: rgba(255, 255, 255, 0.6);
+                        line-height: 200%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// .faq-page:after {
+//     position: absolute;
+//     content: " ";
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+//     z-index: 0;
+//     background: rgba(230, 230, 230, 0.9);
+//   }

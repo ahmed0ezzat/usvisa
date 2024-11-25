@@ -1,0 +1,59 @@
+<div [formGroup]='securityTab'>
+  <section class="section">
+    <label class="selection-label">{{'haveCommunicableDisease' | translate}}
+    </label>
+    <!-- (change)="applicationFormService.onFieldChange('securityTab', 'haveCommunicableDisease', 'yes', ['explainCommunicableDisease'])" -->
+    <mat-radio-group formControlName="haveCommunicableDisease">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && securityTab.get('haveCommunicableDisease').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="securityTab.get('haveCommunicableDisease').value === 'yes'">
+    <mat-form-field class="example-full-width">
+      <mat-label>{{'Please Explain' | translate}}</mat-label>
+      <input required matInput formControlName="explainCommunicableDisease" placeholder="{{'Please Explain' | translate}}" />
+    </mat-form-field>
+  </div>
+
+  <section class="section">
+    <label class="selection-label">{{'haveDisorder' | translate}}
+    </label>
+    <mat-radio-group formControlName="haveDisorder">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && securityTab.get('haveDisorder').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="securityTab.get('haveDisorder').value === 'yes'">
+    <mat-form-field class="example-full-width">
+      <mat-label>{{'Please Explain' | translate}}</mat-label>
+      <input required matInput formControlName="explainDisorder" placeholder="{{'Please Explain' | translate}}" />
+    </mat-form-field>
+  </div>
+
+  <section class="section">
+    <label class="selection-label">{{'haveBeenAddict' | translate}}
+    </label>
+    <mat-radio-group formControlName="haveBeenAddict">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && securityTab.get('haveBeenAddict').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="securityTab.get('haveBeenAddict').value === 'yes'">
+    <mat-form-field class="example-full-width">
+      <mat-label>{{'Please Explain' | translate}}</mat-label>
+      <input required matInput formControlName="explainBeenAddict" placeholder="{{'Please Explain' | translate}}" />
+    </mat-form-field>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<div [formGroup]="additionalDetailsTab">
+  <p>
+    {{"note" | translate}}
+  </p>
+
+  <div *ngFor="let row of contactsForm?.controls; let index = index">
+    <strong>{{"Contact" | translate}} {{ index + 1 }}</strong>
+
+    <mat-form-field>
+      <mat-label>{{"Contact Given Names" | translate}}</mat-label>
+      <input required matInput [formControl]="row.get('contactGivenNames')" placeholder="{{'Contact Given Names' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{"Contact Surnames" | translate}}</mat-label>
+      <input required matInput [formControl]="row.get('contactSurnames')" placeholder="{{'Contact Surnames' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{"School Phone Number" | translate}}</mat-label>
+      <input required matInput [formControl]="row.get('schoolPhoneNumber')" placeholder="{{'School Phone Number' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Email' | translate}}</mat-label>
+      <input required matInput [formControl]="row.get('email')" placeholder="{{'Email' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Street Address' | translate}}</mat-label>
+      <input required matInput [formControl]="row.get('streetAddress')" placeholder="{{'Street Address' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'City' | translate}}</mat-label>
+      <input required matInput [formControl]="row.get('city')" placeholder="{{'City' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Apartment/Suite/Unit Number' | translate}}</mat-label>
+      <input matInput [formControl]="row.get('apartmentSuiteUnitNumber')" placeholder="{{'Apartment/Suite/Unit Number' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'ZIP or Postal Code' | translate}}</mat-label>
+      <input matInput [formControl]="row.get('ZIPOrPostalCode')" placeholder="{{'ZIP or Postal Code' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Country' | translate}}</mat-label>
+      <mat-select [formControl]="row.get('country')">
+        <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'State/Province' | translate}}</mat-label>
+      <input matInput [formControl]="row.get('stateProvince')" placeholder="{{'State/Province' | translate}}" />
+    </mat-form-field>
+
+    <div *ngIf="contactsForm?.controls.length > 2">
+      <button mat-button (click)="onChangeAddContact(false, index)">
+        {{'Remove' | translate}} -
+      </button>
+    </div>
+  </div>
+
+  <div>
+    <button mat-button (click)="onChangeAddContact(true, null)">{{'Add' | translate}} +</button>
+  </div>
+</div>

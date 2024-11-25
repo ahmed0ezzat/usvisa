@@ -1,0 +1,815 @@
+<div [formGroup]="basicInfoTab">
+  <mat-form-field>
+    <mat-label>{{
+      "Select a location where you will be applying for this visa" | translate
+    }}</mat-label>
+    <mat-select formControlName="applyLocation" required>
+      <mat-option
+        *ngFor="let location of applyLocationList"
+        [value]="location.name"
+      >
+        {{ location.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{ "Email" | translate }}</mat-label>
+    <input
+      matInput
+      formControlName="email"
+      placeholder="{{ 'Email' | translate }}"
+      required
+    />
+  </mat-form-field>
+
+  <section class="section">
+    <label class="selection-label">
+      {{
+        "Have you used any other email addresses in the last five years?"
+          | translate
+      }}*
+    </label>
+    <mat-radio-group
+      formControlName="usedOtherEmail"
+      (change)="onChangeUsedOtherEmail()"
+    >
+      <mat-radio-button class="example-margin" value="yes">{{
+        "Yes" | translate
+      }}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{
+        "No" | translate
+      }}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && basicInfoTab.get('usedOtherEmail').invalid">
+      {{ "This field is" | translate }}
+      <strong>{{ "required" | translate }}</strong>
+    </mat-error>
+  </section>
+
+  <div
+    style="background-color: #f5f5f5; padding: 15px; margin-bottom: 24px"
+    *ngIf="
+      basicInfoTab.get('usedOtherEmail').value === 'yes' &&
+      otherEmailArray?.controls.length > 0
+    "
+  >
+    <div
+      *ngFor="let row of otherEmailArray?.controls; let index = index"
+      style="position: relative"
+    >
+      <mat-form-field>
+        <input
+          [formControl]="row.get('otherEmail')"
+          matInput
+          placeholder="{{ 'Additional Email Address' | translate }}"
+          required
+        />
+      </mat-form-field>
+
+      <ng-container *ngIf="otherEmailArray?.controls.length > 1">
+        <button
+          mat-icon-button
+          (click)="onChangeOtherEmailArray(false, index)"
+          style="position: absolute; right: 0; top: 0; z-index: 1000"
+        >
+          <mat-icon>clear</mat-icon>
+        </button>
+      </ng-container>
+    </div>
+    <button mat-stroked-button (click)="onChangeOtherEmailArray(true, null)">
+      {{ "Add Another" | translate }}
+    </button>
+  </div>
+
+  <mat-form-field>
+    <mat-label>{{ "Given Name (e.g., JUAN MIGUEL)" | translate }}</mat-label>
+    <input
+      matInput
+      formControlName="firstName"
+      placeholder="{{ 'Given Name (e.g., JUAN MIGUEL)' | translate }}"
+      required
+    />
+  </mat-form-field>
+
+  <!-- <mat-form-field>
+    <mat-label>{{'Middle Name' | translate}} </mat-label>
+    <input matInput formControlName="middleName" placeholder="{{'Middle Name' | translate}}" />
+  </mat-form-field> -->
+
+  <mat-form-field>
+    <mat-label>
+      {{ "Surname (e.g., FERNANDEZ GARCIA)" | translate }}
+      <mat-icon>help_outline</mat-icon>
+    </mat-label>
+    <input
+      matTooltip="Enter all surnames as listed in your passport.
+    If only one name is listed in your passport,
+    enter that Surname."
+      #tooltip="matTooltip"
+      matTooltipPosition="above"
+      matTooltipClass="customTooltip"
+      matTooltipShowDelay="500"
+      matTooltipHideDelay="1000"
+      matInput
+      formControlName="surName"
+      placeholder="{{ 'Surname (e.g., FERNANDEZ GARCIA)' | translate }}"
+      required
+      autocomplete="off"
+      (click)="tooltip.toggle()"
+    />
+    <!-- <mat-hint>
+      Enter all surnames as listed in your passport.
+      If only one name is listed in your passport,
+      enter that Surname.
+    </mat-hint> -->
+  </mat-form-field>
+  <br />
+  <br />
+  <br />
+
+  <mat-form-field>
+    <mat-label>{{ "Full Name" | translate }}</mat-label>
+    <input
+      matInput
+      formControlName="fullName"
+      placeholder="{{ 'Full Name' | translate }}"
+    />
+  </mat-form-field>
+
+  <section class="section">
+    <label class="selection-label"
+      >{{
+        "Have you ever used other names (i.e., maiden, religious, professional, alias,
+      etc.)?"
+          | translate
+      }}
+    </label>
+    <mat-radio-group
+      formControlName="haveOtherNames"
+      (change)="onChangeHaveOtherNames()"
+    >
+      <mat-radio-button class="example-margin" value="yes">{{
+        "Yes" | translate
+      }}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{
+        "No" | translate
+      }}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && basicInfoTab.get('haveOtherNames').invalid">
+      {{ "This field is" | translate }}
+      <strong>{{ "required" | translate }}</strong>
+    </mat-error>
+  </section>
+
+  <div
+    *ngIf="
+      basicInfoTab.get('haveOtherNames').value === 'yes' &&
+      additionalNamesArray?.controls.length > 0
+    "
+  >
+    <div
+      style="
+        background-color: #f5f5f5;
+        padding: 15px;
+        margin-bottom: 24px;
+        position: relative;
+      "
+      *ngFor="let row of additionalNamesArray?.controls; let index = index"
+    >
+      <mat-form-field
+        *ngIf="basicInfoTab.get('haveOtherNames').value === 'yes'"
+      >
+        <mat-label>{{ "Other Given Names Used" | translate }}</mat-label>
+        <input
+          matInput
+          [formControl]="row.get('additionalGivenName')"
+          placeholder="{{ 'Other Given Names Used' | translate }}"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field
+        *ngIf="basicInfoTab.get('haveOtherNames').value === 'yes'"
+      >
+        <mat-label>{{
+          "Other Surnames Used (maiden, religious, professional, aliases, etc.)"
+            | translate
+        }}</mat-label>
+        <input
+          matInput
+          [formControl]="row.get('additionalSurname')"
+          placeholder="{{
+            'Other Surnames Used (maiden, religious, professional, aliases, etc.)'
+              | translate
+          }}"
+          required
+        />
+      </mat-form-field>
+      <ng-container *ngIf="additionalNamesArray?.controls.length > 1">
+        <button
+          mat-icon-button
+          (click)="onChangeAdditionalNamesArray(false, index)"
+          style="position: absolute; right: 0; top: 0; z-index: 1000"
+        >
+          <mat-icon>clear</mat-icon>
+        </button>
+      </ng-container>
+    </div>
+    <button
+      mat-stroked-button
+      (click)="onChangeAdditionalNamesArray(true, null)"
+    >
+      {{ "Add Another" | translate }}
+    </button>
+  </div>
+
+  <section class="section">
+    <label class="selection-label"
+      >{{ "Do you have a telecode that represents your name?" | translate }}
+    </label>
+    <mat-radio-group
+      formControlName="havetelecode"
+      (change)="onChangeTelCode()"
+    >
+      <mat-radio-button class="example-margin" value="yes">{{
+        "Yes" | translate
+      }}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{
+        "No" | translate
+      }}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && basicInfoTab.get('havetelecode').invalid">
+      {{ "This field is" | translate }}
+      <strong>{{ "required" | translate }}</strong>
+    </mat-error>
+  </section>
+
+  <mat-form-field *ngIf="basicInfoTab.get('havetelecode').value === 'yes'">
+    <mat-label>{{ "Given Name (e.g., JUAN MIGUEL)" | translate }}</mat-label>
+    <input
+      matInput
+      formControlName="telecodeGivenNames"
+      placeholder="{{ 'Given Name (e.g., JUAN MIGUEL)' | translate }}"
+      required
+    />
+    <mat-hint>{{
+      "Should be a four-digit code number (e.g 1234)" | translate
+    }}</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="basicInfoTab.get('havetelecode').value === 'yes'">
+    <mat-label>{{ "Surname (e.g., FERNANDEZ GARCIA)" | translate }}</mat-label>
+    <input
+      matInput
+      formControlName="telecodeSurnames"
+      placeholder="{{ 'Surname (e.g., FERNANDEZ GARCIA)' | translate }}"
+      required
+    />
+    <mat-hint>{{
+      "Should be a four-digit code number (e.g 1234)" | translate
+    }}</mat-hint>
+  </mat-form-field>
+
+  <section class="section">
+    <label class="selection-label">{{ "Gender" | translate }}: </label>
+    <mat-radio-group formControlName="gender">
+      <mat-radio-button class="example-margin" value="male">{{
+        "Male" | translate
+      }}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="female">{{
+        "Female" | translate
+      }}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && basicInfoTab.get('gender').invalid">
+      {{ "This field is" | translate }}
+      <strong>{{ "required" | translate }}</strong>
+    </mat-error>
+  </section>
+
+  <div style="background-color: #f5f5f5; padding: 15px; margin-bottom: 24px">
+    <span class="title" style="text-transform: uppercase; padding-bottom: 16px">
+      {{ "Date and Place of Birth" | translate }}
+    </span>
+    <mat-form-field>
+      <mat-label>{{ "Date Of Birth" | translate }}</mat-label>
+      <input
+        (dateChange)="validateDateTime()"
+        formControlName="dateOfBirth"
+        matInput
+        [matDatepicker]="picker"
+        required
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker> </mat-datepicker>
+      <mat-error *ngIf="basicInfoTab.get('dateOfBirth').invalid">
+        {{ "Date cannot be equal or later than today" | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ "City" | translate }}</mat-label>
+      <input
+        matInput
+        formControlName="city"
+        placeholder="{{ 'City' | translate }}"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ "State/Province" | translate }}</mat-label>
+      <input
+        matInput
+        formControlName="stateName"
+        placeholder="{{ 'State Name' | translate }}"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ "Country/Region" | translate }}</mat-label>
+      <mat-select formControlName="country" required>
+        <mat-option
+          *ngFor="let country of birthPlaceList"
+          [value]="country.name"
+        >
+          {{ country.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field>
+    <mat-label>{{ "Marital Status" | translate }}</mat-label>
+    <mat-select
+      (selectionChange)="onChangeMaritalStatus()"
+      formControlName="maritalStatus"
+      required
+    >
+      <mat-option *ngFor="let status of maritalStatusList" [value]="status.val">
+        {{ status.val }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div
+    *ngIf="
+      basicInfoTab.get('maritalStatus').value === 'MARRIED' ||
+      basicInfoTab.get('maritalStatus').value === 'COMMON LAW MARRIAGE' ||
+      basicInfoTab.get('maritalStatus').value ===
+        'CIVIL UNION / DOMESTIC PARTNERSHIP' ||
+      basicInfoTab.get('maritalStatus').value === 'SEPARATED' ||
+      basicInfoTab.get('maritalStatus').value === 'WIDOWED'
+    "
+  >
+    <mat-form-field>
+      <mat-label>{{
+        "Spouse Given Name (e.g., JUAN MIGUEL)" | translate
+      }}</mat-label>
+      <input
+        matInput
+        formControlName="spouseGivenName"
+        placeholder="{{ 'Spouse Given Name (e.g., JUAN MIGUEL)' | translate }}"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{
+        "Spouse Surname (e.g., FERNANDEZ GARCIA)" | translate
+      }}</mat-label>
+      <input
+        matInput
+        formControlName="spouseSurName"
+        placeholder="{{
+          'Spouse Surname (e.g., FERNANDEZ GARCIA)' | translate
+        }}"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>{{ "Spouse Date of Birth" | translate }}</mat-label>
+      <input
+        (dateChange)="validateSpouseDateOfBirth()"
+        formControlName="spouseDateOfBirth"
+        matInput
+        [matDatepicker]="pickerx"
+        required
+      />
+      <mat-datepicker-toggle matSuffix [for]="pickerx"></mat-datepicker-toggle>
+      <mat-datepicker #pickerx> </mat-datepicker>
+      <mat-error *ngIf="basicInfoTab.get('spouseDateOfBirth').invalid">
+        {{ "Date cannot be equal or later than today" | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ "Nationality" | translate }}</mat-label>
+      <mat-select formControlName="spouseNationality" required>
+        <mat-option
+          *ngFor="let country of countryList"
+          [value]="country.name"
+          >{{ country.name }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ "Spouse Country of Birth" | translate }}</mat-label>
+      <mat-select formControlName="spouseCountryOfBirth" required>
+        <mat-option
+          *ngFor="let country of countryList"
+          [value]="country.name"
+          >{{ country.name }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ "Spouse City of Birth" | translate }}</mat-label>
+      <input
+        matInput
+        formControlName="spouseCityOfBirth"
+        placeholder="{{ 'Spouse City of Birth' | translate }}"
+        required
+      />
+    </mat-form-field>
+
+    <section
+      class="section"
+      *ngIf="basicInfoTab.get('maritalStatus').value !== 'WIDOWED'"
+    >
+      <mat-form-field>
+        <mat-label>{{ "Spouse Address" | translate }}</mat-label>
+        <mat-select
+          formControlName="spouseAddressType"
+          (selectionChange)="onChangeSpouseAddressType()"
+          required
+        >
+          <mat-option value="Same as Home Address"
+            >Same as Home Address</mat-option
+          >
+          <mat-option value="Same as Mailing Address"
+            >Same as Mailing Address</mat-option
+          >
+          <mat-option value="Same as U.S. Contact Address"
+            >Same as U.S. Contact Address</mat-option
+          >
+          <mat-option value="Do Not Know">Do Not Know</mat-option>
+          <mat-option value="Other (Specify Address)"
+            >Other (Specify Address)</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    <div
+      *ngIf="
+        basicInfoTab.get('spouseAddressType').value ===
+        'Other (Specify Address)'
+      "
+    >
+      <mat-form-field>
+        <mat-label>{{ "Street Address" | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="spouseAddress"
+          placeholder="{{ 'Spouse Address' | translate }}"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ "City" | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="spouseCity"
+          placeholder="{{ 'City' | translate }}"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ "State/Province" | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="spouseState"
+          placeholder="{{ 'State/Province' | translate }}"
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ "Postal Zone/ZIP Code" | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="spouseZIPOrPostalCode"
+          placeholder="{{ 'Postal Zone/ZIP Code' | translate }}"
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ "Country" | translate }}</mat-label>
+        <mat-select formControlName="spouseCountry">
+          <mat-option
+            *ngFor="let country of countryList"
+            [value]="country.name"
+            >{{ country.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div *ngIf="basicInfoTab.get('maritalStatus').value === 'DIVORCED'">
+    <div *ngFor="let row of DivorcedForm?.controls; let index = index">
+      <mat-form-field>
+        <mat-label>{{ "Number of Former Spouses" | translate }}</mat-label>
+        <input
+          required
+          matInput
+          [formControl]="row.get('numberOfFormerSpouses')"
+          placeholder="{{ 'Number of Former Spouses' | translate }}"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{
+          "Spouse Given Name (e.g., JUAN MIGUEL)" | translate
+        }}</mat-label>
+        <input
+          required
+          matInput
+          [formControl]="row.get('spouseGivenName')"
+          placeholder="{{
+            'Spouse Given Name (e.g., JUAN MIGUEL)' | translate
+          }}"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{
+          "Spouse Surname (e.g., FERNANDEZ GARCIA)" | translate
+        }}</mat-label>
+        <input
+          required
+          matInput
+          [formControl]="row.get('spouseSurName')"
+          placeholder="{{
+            'Spouse Surname (e.g., FERNANDEZ GARCIA)' | translate
+          }}"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>{{ "Spouse Date of Birth" | translate }}</mat-label>
+        <input
+          [formControl]="row.get('spouseDateOfBirth')"
+          matInput
+          [matDatepicker]="picker2"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="picker2"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker2> </mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ "Country Name" | translate }}</mat-label>
+        <mat-select [formControl]="row.get('spouseCountryName')" required>
+          <mat-option
+            *ngFor="let country of countryList"
+            [value]="country.name"
+          >
+            {{ country.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ "Spouse Country of Birth" | translate }}</mat-label>
+        <mat-select [formControl]="row.get('spouseCountryOfBirth')" required>
+          <mat-option
+            *ngFor="let country of countryList"
+            [value]="country.name"
+          >
+            {{ country.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ "Spouse City of Birth" | translate }}</mat-label>
+        <input
+          required
+          matInput
+          [formControl]="row.get('spouseCityOfBirth')"
+          placeholder="{{ 'Spouse City of Birth' | translate }}"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>{{ "Marriage Start Date" | translate }}</mat-label>
+        <input
+          [formControl]="row.get('marriageStartDate')"
+          matInput
+          [matDatepicker]="picker3"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="picker3"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker3> </mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>{{ "Marriage End Date" | translate }}</mat-label>
+        <input
+          [formControl]="row.get('marriageEndDate')"
+          matInput
+          [matDatepicker]="picker4"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="picker4"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker4> </mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{
+          "Please explain briefly how the marriage ended" | translate
+        }}</mat-label>
+        <textarea
+          required
+          matInput
+          [formControl]="row.get('howMarriageEnded')"
+          placeholder="{{
+            'Please explain briefly how the marriage ended' | translate
+          }}"
+        ></textarea>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{
+          "Country/Region Marriage was Terminated" | translate
+        }}</mat-label>
+        <mat-select
+          [formControl]="row.get('countryRegionMarriageWasTerminated')"
+          required
+        >
+          <mat-option
+            *ngFor="let country of countryList"
+            [value]="country.name"
+          >
+            {{ country.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="DivorcedForm?.controls.length > 1">
+        <button mat-button (click)="onChangeDivorcedForm(false, index)">
+          {{ "Remove" | translate }} -
+        </button>
+      </div>
+    </div>
+    <div>
+      <button mat-button (click)="onChangeDivorcedForm(true, null)">
+        {{ "Add" | translate }} +
+      </button>
+    </div>
+  </div>
+
+  <h1>
+    {{ "Social Media" | translate }}
+  </h1>
+  <span class="title" style="text-transform: uppercase; padding-bottom: 16px">
+    {{ "Do you have a social media presence?" | translate }}
+  </span>
+  <p style="color: #666">
+    {{ "social media description" | translate }}
+  </p>
+
+  <div
+    style="
+      background-color: #f5f5f5;
+      padding: 15px;
+      margin-bottom: 24px;
+      position: relative;
+    "
+    *ngFor="let row of socialMediaArray?.controls; let index = index"
+  >
+    <mat-form-field style="width: 95%">
+      <mat-label>{{ "Social Media Provider/Platform" | translate }}</mat-label>
+      <mat-select [formControl]="row.get('socialMediaProvider')" required>
+        <mat-option
+          *ngFor="let social of socialMediaList"
+          [value]="social.name"
+        >
+          {{ social.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field style="width: 95%">
+      <input
+        [formControl]="row.get('socialMediaIdentifier')"
+        matInput
+        placeholder="{{ 'Social Media Identifier' | translate }}"
+        required
+      />
+    </mat-form-field>
+
+    <ng-container *ngIf="socialMediaArray?.controls.length > 1">
+      <button
+        mat-icon-button
+        (click)="onChangeSocialMediaArray(false, index)"
+        style="position: absolute; right: 0px; top: 0px; z-index: 1000"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+    </ng-container>
+  </div>
+  <button mat-stroked-button (click)="onChangeSocialMediaArray(true, null)">
+    {{ "Add Another" | translate }}
+  </button>
+
+  <section class="section" style="margin-top: 32px">
+    <label class="selection-label">
+      {{ "other social media" | translate }}*
+    </label>
+    <mat-radio-group
+      formControlName="additionalSocialMedia"
+      (change)="onChangeAdditionalSocialMedia()"
+    >
+      <mat-radio-button class="example-margin" value="yes">{{
+        "Yes" | translate
+      }}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{
+        "No" | translate
+      }}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error
+      *ngIf="isSubmit && basicInfoTab.get('additionalSocialMedia').invalid"
+    >
+      {{ "This field is" | translate }}
+      <strong>{{ "required" | translate }}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="basicInfoTab.get('additionalSocialMedia').value === 'yes'">
+    <p style="color: #666">
+      {{ "other social media description" | translate }}
+    </p>
+    <div
+      style="
+        background-color: #f5f5f5;
+        padding: 15px;
+        margin-bottom: 24px;
+        position: relative;
+      "
+      *ngFor="
+        let row of additionalSocialMediaArray?.controls;
+        let index = index
+      "
+    >
+      <mat-form-field style="width: 95%">
+        <input
+          [formControl]="row.get('additionalSocialMediaPlatform')"
+          matInput
+          placeholder="{{ 'Additional Social Media Platform' | translate }}"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field style="width: 95%">
+        <input
+          [formControl]="row.get('additionalSocialMediaHandle')"
+          matInput
+          placeholder="{{ 'Additional Social Media Handle' | translate }}"
+          required
+        />
+      </mat-form-field>
+
+      <ng-container *ngIf="additionalSocialMediaArray?.controls.length > 1">
+        <button
+          mat-icon-button
+          (click)="onChangeAdditionalSocialMediaArray(false, index)"
+          style="position: absolute; right: 0px; top: 0px; z-index: 1000"
+        >
+          <mat-icon>clear</mat-icon>
+        </button>
+      </ng-container>
+    </div>
+    <button
+      mat-stroked-button
+      (click)="onChangeAdditionalSocialMediaArray(true, null)"
+    >
+      {{ "Add Another" | translate }}
+    </button>
+  </div>
+</div>

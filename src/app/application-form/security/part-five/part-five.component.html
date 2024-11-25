@@ -1,0 +1,129 @@
+<div [formGroup]='securityTab'>
+    <section class="section">
+        <label class="selection-label">
+            {{'withheldCustody' | translate}}
+        </label>
+        <mat-radio-group formControlName="withheldCustody">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && securityTab.get('withheldCustody').invalid">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="securityTab.get('withheldCustody').value === 'yes'">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Please Explain' | translate}}</mat-label>
+            <input required matInput formControlName="explainWithheldCustody"
+                placeholder="{{'Please Explain' | translate}}" />
+        </mat-form-field>
+    </div>
+
+
+    <section class="section">
+        <label class="selection-label">
+            {{'lawViolation' | translate}}
+        </label>
+        <mat-radio-group formControlName="lawViolation">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && securityTab.get('lawViolation').invalid">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="securityTab.get('lawViolation').value === 'yes'">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Please Explain' | translate}}</mat-label>
+            <input required matInput formControlName="explainLawViolation"
+                placeholder="{{'Please Explain' | translate}}" />
+        </mat-form-field>
+    </div>
+
+    <section class="section">
+        <label class="selection-label">
+            {{'avoidTaxation' | translate}}
+        </label>
+        <mat-radio-group formControlName="avoidTaxation">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && securityTab.get('avoidTaxation').invalid">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="securityTab.get('avoidTaxation').value === 'yes'">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Please Explain' | translate}}</mat-label>
+            <input required matInput formControlName="explainAvoidTaxation"
+                placeholder="{{'Please Explain' | translate}}" />
+        </mat-form-field>
+    </div>
+
+
+    <section class="section">
+        <label class="selection-label">
+            {{'removalHearing' | translate}}
+        </label>
+        <mat-radio-group formControlName="removalHearing">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && securityTab.get('removalHearing').invalid">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="securityTab.get('removalHearing').value === 'yes'">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Please Explain' | translate}}</mat-label>
+            <input required matInput formControlName="explainRemovalHearing"
+                placeholder="{{'Please Explain' | translate}}" />
+        </mat-form-field>
+    </div>
+
+    <section class="section">
+        <label class="selection-label">
+            {{'attendHearing' | translate}}
+        </label>
+        <mat-radio-group formControlName="attendHearing">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && securityTab.get('attendHearing').invalid">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="securityTab.get('attendHearing').value === 'yes'">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Please Explain' | translate}}</mat-label>
+            <input required matInput formControlName="explainAttendHearing"
+                placeholder="{{'Please Explain' | translate}}" />
+        </mat-form-field>
+    </div>
+
+    <section class="section">
+        <label class="selection-label">
+            {{'unlawfullyPresent' | translate}}
+        </label>
+        <mat-radio-group formControlName="unlawfullyPresent">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && securityTab.get('unlawfullyPresent').invalid">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="securityTab.get('unlawfullyPresent').value === 'yes'">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Please Explain' | translate}}</mat-label>
+            <input required matInput formControlName="explainUnlawfullyPresent"
+                placeholder="{{'Please Explain' | translate}}" />
+        </mat-form-field>
+    </div>
+</div>

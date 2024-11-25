@@ -1,0 +1,130 @@
+<div [formGroup]="basicInfoTab">
+  <mat-form-field>
+    <mat-label>{{'Phone Number' | translate}}</mat-label>
+    <input matInput formControlName="phoneNumber" placeholder="{{'Phone Number' | translate}}" required />
+    <mat-error *ngIf="basicInfoTab.get('phoneNumber').invalid">
+      {{'Must use numbers only with minimum of 5' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'Secondary Phone Number' | translate}}</mat-label>
+    <input matInput formControlName="secondaryPhoneNumber" placeholder="{{'Secondary Phone Number' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'Work Phone Number' | translate}}</mat-label>
+    <input matInput formControlName="workPhoneNumber" placeholder="{{'Work Phone Number' | translate}}" />
+  </mat-form-field>
+
+  <section class="section">
+    <label class="selection-label">{{'Have you used any other phone numbers in the last five years?' | translate}}
+    </label>
+    <mat-radio-group (change)="onChangeUsedOtherPhoneNumbers()" formControlName="usedOtherPhoneNumbers">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && basicInfoTab.get('usedOtherPhoneNumbers').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div style="background-color: #f5f5f5;padding: 15px;margin-bottom: 24px;"
+    *ngIf='basicInfoTab.get("usedOtherPhoneNumbers").value === "yes" && additionalPhoneNumbersArray?.controls.length > 0'>
+    <div *ngFor="let row of additionalPhoneNumbersArray?.controls; let index = index" style="position: relative;">
+      <mat-form-field>
+        <input [formControl]="row.get('additionalPhoneNumber')" matInput placeholder="{{'Additional Phone Number' | translate}}"
+          required />
+          <mat-error *ngIf="row.get('additionalPhoneNumber').invalid">
+            {{'Must use numbers only with minimum of 5' | translate}} <strong>{{'required' | translate}}</strong>
+          </mat-error>
+      </mat-form-field>
+
+      <ng-container *ngIf="additionalPhoneNumbersArray?.controls.length > 1">
+        <button mat-icon-button (click)="onChangeAdditionalPhoneNumbersArray(false, index)"
+          style="position: absolute;right:0;top:0;z-index: 1000;">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </ng-container>
+    </div>
+    <button mat-stroked-button (click)="onChangeAdditionalPhoneNumbersArray(true, null)">
+      {{'Add Another' | translate}}
+    </button>
+  </div>
+
+  <mat-form-field>
+    <mat-label>{{'Home Address' | translate}}</mat-label>
+    <input matInput formControlName="homeAddress" placeholder="{{'Street Address' | translate}}" required />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'City' | translate}}</mat-label>
+    <input matInput formControlName="contactsInfoCity" placeholder="{{'City' | translate }}" required />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'Apartment/Suite/Unit Number' | translate}}</mat-label>
+    <input matInput formControlName="apartmentSuiteUnitNumber"
+      placeholder="{{'Apartment/Suite/Unit Number' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'ZIP or Postal Code' | translate}}</mat-label>
+    <input matInput formControlName="ZIPOrPostalCode" placeholder="{{'ZIP or Postal Code' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'Country Name' | translate}}</mat-label>
+    <mat-select formControlName="countryName" required>
+      <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <section class="section">
+    <label class="selection-label">{{'Is your mailing address different from your home address?' | translate}}
+    </label>
+    <mat-radio-group (change)="onChangeisMailingAddressDifferentFromHomeAddress()"
+      formControlName="isMailingAddressDifferentFromHomeAddress">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && basicInfoTab.get('isMailingAddressDifferentFromHomeAddress').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="basicInfoTab.get('isMailingAddressDifferentFromHomeAddress').value === 'yes'">
+    <mat-form-field>
+      <mat-label>{{'Street Address (Line 1)' | translate}}</mat-label>
+      <input matInput formControlName="mailingStreetAddress1" placeholder="{{'Street Address (Line 1)' | translate}}" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Street Address (Line 2)' | translate}}</mat-label>
+      <input matInput formControlName="mailingStreetAddress2" placeholder="{{'Street Address (Line 2)' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'City' | translate}}</mat-label>
+      <input matInput required formControlName="mailingCity" placeholder="{{'City' | translate }}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'State/Province' | translate}}</mat-label>
+      <input matInput formControlName="mailingState"
+        placeholder="{{'State/Province' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'ZIP or Postal Code' | translate}}</mat-label>
+      <input matInput formControlName="mailingZIPOrPostalCode" placeholder="{{'ZIP or Postal Code' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Country' | translate}}</mat-label>
+      <mat-select formControlName="mailingCountry" required>
+        <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

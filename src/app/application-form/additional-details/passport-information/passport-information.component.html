@@ -1,0 +1,124 @@
+<div [formGroup]="additionalDetailsTab">
+  <div>
+    <mat-form-field>
+      <mat-label>{{'Passport Type' | translate}}</mat-label>
+      <mat-select formControlName="passportType" (change)='checkPassportType()' required>
+        <mat-option *ngFor="let passport of Passports" [value]="passport.val">{{ passport.val }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div *ngIf="additionalDetailsTab.get('passportType').value === 'Other'">
+      <mat-form-field>
+        <mat-label>{{'Passport Type' | translate}}</mat-label>
+        <input matInput formControlName="otherPassportType" placeholder="{{'Passport Type' | translate}}" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field>
+      <mat-label>{{'Passport/Travel Document Number' | translate}}</mat-label>
+      <input required minlength="8" matInput formControlName="passportDocumentNumber"
+        placeholder="{{'Passport/Travel Document Number' | translate}}" />
+      <mat-error *ngIf="additionalDetailsTab.get('passportDocumentNumber').invalid">
+        {{'Must be greater than or equal to 8' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Passport Book Number' | translate}}</mat-label>
+      <input matInput formControlName="passportBookNumber"
+        placeholder="{{'Passport/Travel Document Number' | translate}}" />
+      <mat-error *ngIf="additionalDetailsTab.get('passportDocumentNumber').invalid">
+        {{'Must be greater than or equal to 8' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Passport Country of Issue' | translate}}</mat-label>
+      <mat-select formControlName="PassportCountryOfIssue" required>
+        <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'In the city of' | translate}}</mat-label>
+      <input matInput required formControlName="InTheCityOf" placeholder="{{'In the city of' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Passport State' | translate}}</mat-label>
+      <input matInput formControlName="passportState" placeholder="{{'Passport State' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>{{'Passport Issued On' | translate}}</mat-label>
+      <input formControlName="passportIssuedOn" matInput [matDatepicker]="passportIssuedOn" required />
+      <mat-datepicker-toggle matSuffix [for]="passportIssuedOn"></mat-datepicker-toggle>
+      <mat-datepicker #passportIssuedOn> </mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>{{'Passport Expiration Date' | translate}}</mat-label>
+      <input 
+        formControlName="passportExpirationDate" 
+        matInput 
+        [matDatepicker]="passportExpirationDate" 
+        required />
+      <mat-datepicker-toggle matSuffix [for]="passportExpirationDate"></mat-datepicker-toggle>
+      <mat-datepicker #passportExpirationDate> </mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <!-- *ngIf="additionalDetailsTab.get('knowYourPassportDetails').value == 'yes'" -->
+  <section class="section">
+    <label class="selection-label">{{'Have you ever lost a passport?' | translate}}</label>
+    <mat-radio-group formControlName="haveEverLostPassport" (change)="
+        onChangeRadioButton('haveEverLostPassport', [
+          'missedPassportTravelDocumentNumber',
+          'countryThatIssuedPassportDocument',
+          'explainLostPassport'
+        ])
+      ">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="
+        isSubmit && additionalDetailsTab.get('haveEverLostPassport').invalid
+      ">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <!-- && additionalDetailsTab.get('knowYourPassportDetails').value == 'yes' -->
+  <div *ngIf="additionalDetailsTab.get('haveEverLostPassport').value === 'yes'">
+    <mat-form-field>
+      <mat-label>{{'Passport/Travel Document Number' | translate}}</mat-label>
+      <input required matInput formControlName="missedPassportTravelDocumentNumber"
+        placeholder="{{'Passport/Travel Document Number' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>
+        {{'Country/Authority that Issued Passport/Travel Document' | translate}}</mat-label>
+      <mat-select formControlName="countryThatIssuedPassportDocument">
+        <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Please Explain' | translate}}</mat-label>
+      <textarea required matInput formControlName="explainLostPassport"
+        placeholder="{{'Passport Type' | translate}}"></textarea>
+    </mat-form-field>
+  </div>
+  <!-- <div *ngIf="additionalDetailsTab.get('knowYourPassportDetails').value === 'no'">
+    <p>
+      {{'Please email the following information about your passport to' | translate}}
+    </p>
+    <ul>
+      <li>{{'Passport type (regular, diplomatic, official, other)' | translate}}</li>
+      <li>{{'Passport number | translate'}}</li>
+      <li>{{'Issue country and city' | translate}}</li>
+      <li>{{'Issue date and expiry date' | translate}}</li>
+    </ul>
+  </div> -->
+</div>

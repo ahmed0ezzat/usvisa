@@ -1,0 +1,311 @@
+<div [formGroup]="tripInfoTab">
+  <section class="section">
+    <label class="selection-label">{{'Have you ever been to the United States before?' | translate}}
+    </label>
+    <mat-radio-group formControlName="isUnitedStates" (change)="onChangeisUnitedStates()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && tripInfoTab.get('isUnitedStates').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="tripInfoTab.get('isUnitedStates').value === 'yes'">
+    <span class="title" style="text-transform: uppercase;padding-bottom: 16px;">
+      {{'Provide information on your last five U.S visits:' | translate}}
+    </span>
+    <div
+      style="background-color: #f5f5f5;padding: 15px 48px 15px 15px;margin-bottom: 24px;position: relative" 
+      *ngFor="let row of unitedStatesArray?.controls; let index = index">
+      <mat-form-field>
+        <input placeholder="{{'Trip Date' | translate}}" (dateChange)="validateDateTime('tripDate',index)"
+          [formControl]="row.get('tripDate')" matInput required [matDatepickerFilter]="myFilter" [matDatepicker]="picker" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker> </mat-datepicker>
+        <mat-error *ngIf="row.get('tripDate').invalid">
+          {{'Date cannot be equal or later than today' | translate}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field *ngIf='row.get("tripTime").value !== "LESS THAN 24 HOURS"'>
+        <input type='number' [formControl]="row.get('tripDuration')" matInput placeholder="{{'Trip Duration' | translate}}"
+          required />
+      </mat-form-field>
+
+      <section class="section">
+        <mat-form-field>
+          <mat-select [formControl]="row.get('tripTime')" placeholder="{{'How long was your trip?' | translate}}"
+            (selectionChange)='onChangeTripTime($event.value, index)' required>
+            <mat-option *ngFor="let time of tripTimeArray" [value]="time.val">
+              {{ time.val }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
+      <div *ngIf="unitedStatesArray?.controls.length > 1">
+        <button
+          mat-icon-button
+          (click)="onChangeTravelUnitedStatus(false, index)"
+          style="position: absolute;right:0;top:0;z-index: 1000;">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div>
+      <button mat-stroked-button (click)="onChangeTravelUnitedStatus(true, null)">
+        {{'Add Another' | translate}} +
+      </button>
+    </div>
+  </div>
+
+  <section class="section" *ngIf="tripInfoTab.get('isUnitedStates').value === 'yes'">
+    <label class="selection-label">{{'Do you or did you ever hold a U.S. Driver’s License?' | translate}}
+    </label>
+    <mat-radio-group (change)="onChangeisDriverLicense()" formControlName="hasDriverLicense">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && tripInfoTab.get('hasDriverLicense').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="tripInfoTab.get('hasDriverLicense').value === 'yes'">
+    <div *ngFor="let row of driverLicenseArray?.controls; let index = index">
+      <mat-form-field>
+        <input [formControl]="row.get('driverLicenseNumber')" matInput
+          placeholder="{{'Driver License Number' | translate}}" required />
+      </mat-form-field>
+
+      <section class="section">
+        <mat-form-field>
+          <mat-select [formControl]="row.get('driverLicenseState')"
+            placeholder="{{'State if Driver License' | translate}}" required>
+            <mat-option *ngFor="let state of statesList" [value]="state.name">
+              {{ state.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
+      <div *ngIf="driverLicenseArray?.controls.length > 1">
+        <button mat-button (click)="onChangeDriverLicense(false, index)">
+          {{'Remove' | translate}} -
+        </button>
+      </div>
+    </div>
+    <div>
+      <button mat-button (click)="onChangeDriverLicense(true, null)">
+        {{'Add' | translate}} +
+      </button>
+    </div>
+  </div>
+
+  <section class="section">
+    <label class="selection-label">{{'Have you ever been issued a U.S. Visa?' | translate}}
+    </label>
+    <mat-radio-group formControlName="issuedUsVisa" (change)="onChangeIssuedUsVisa()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && tripInfoTab.get('issuedUsVisa').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <div *ngIf="tripInfoTab.get('issuedUsVisa').value === 'yes'">
+    <div *ngFor="let row of usVisasArray?.controls; let index = index">
+      <mat-form-field class="example-full-width">
+        <mat-label>{{'Date Last Visa Was Issued' | translate}}</mat-label>
+        <input required [formControl]="row.get('DateLastVisaWasIssued')" matInput [matDatepicker]="picker" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker> </mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>{{'Expiration Date' | translate}}</mat-label>
+        <input required [formControl]="row.get('expirationDate')" matInput [matDatepicker]="picker1" />
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1> </mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{'Visa Number' | translate}}</mat-label>
+        <input matInput [formControl]="row.get('visaNumber')" placeholder="{{'Visa Number' | translate}}" />
+      </mat-form-field>
+
+      <section class="section">
+        <label class="selection-label">{{'Are you applying for the same type of visa?' | translate}}
+        </label>
+        <mat-radio-group [formControl]="row.get('applyingForTheSameTypeOfVisa')">
+          <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+          <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && row.get('applyingForTheSameTypeOfVisa').invalid">
+          {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+      </section>
+
+      <section class="section">
+        <label class="selection-label">{{'Have you been ten-printed?' | translate}}
+        </label>
+        <mat-radio-group [formControl]="row.get('haveEverBeenTenPrinted')">
+          <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+          <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && row.get('haveEverBeenTenPrinted').invalid">
+          {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+      </section>
+
+      <section class="section">
+        <label class="selection-label">{{'Are you applying in the same country or location where the visa above was
+          issued' | translate}}
+        </label>
+        <mat-radio-group [formControl]="row.get('applyingInTheSameCountry')">
+          <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+          <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && row.get('applyingInTheSameCountry').invalid">
+          {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+      </section>
+
+      <section class="section">
+        <label class="selection-label">{{'Has your U.S. Visa ever been cancelled or revoked?' | translate}}
+        </label>
+        <mat-radio-group [formControl]="row.get('visaEverBeenCancelledOrRevoked')"
+          (change)='ifVisaEverBeenCancelledOrRevoked(row.get("visaEverBeenCancelledOrRevoked").value,index)'>
+          <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+          <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && row.get('visaEverBeenCancelledOrRevoked').invalid">
+          {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+        <div *ngIf="row.get('visaEverBeenCancelledOrRevoked').value === 'yes'">
+
+          <mat-form-field class="example-full-width">
+            <mat-label>{{'Cancellation date' | translate}}</mat-label>
+            <input required [formControl]="row.get('cancellationDate')" matInput [matDatepicker]="picker2" />
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2> </mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>{{'Please Explain' | translate}}</mat-label>
+            <input matInput [formControl]="row.get('pleaseExplain')" placeholder="{{'Please Explain' | translate}}"
+              required />
+          </mat-form-field>
+
+        </div>
+      </section>
+      <section class="section">
+        <label class="selection-label">{{'Has your U.S. Visa ever been lost or stolen?' | translate}}
+        </label>
+        <mat-radio-group [formControl]="row.get('visaEverBeenLostOrStolen')"
+          (change)='ifVisaEverBeenLostOrStolen(row.get("visaEverBeenLostOrStolen").value,index)'>
+          <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+          <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && row.get('visaEverBeenLostOrStolen').invalid">
+          {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+        <div *ngIf="row.get('visaEverBeenLostOrStolen').value === 'yes'">
+
+          <mat-form-field>
+            <mat-label>{{'Enter year visa was lost or stolen' | translate}}</mat-label>
+            <input matInput [formControl]="row.get('lostVisaYear')"
+              placeholder="{{'Enter year visa was lost or stolen' | translate}}" required />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>{{'Please Explain' | translate}}</mat-label>
+            <input matInput [formControl]="row.get('stolenVisaPleaseExplain')"
+              placeholder="{{'Please Explain' | translate}}" required />
+          </mat-form-field>
+
+        </div>
+      </section>
+
+      <div *ngIf="usVisasArray?.controls.length > 1">
+        <button mat-button (click)="onChangeAddVisa(false, index)">
+          {{'Remove' | translate}} -
+        </button>
+      </div>
+
+    </div>
+    <div>
+      <button mat-button (click)="onChangeAddVisa(true, null)">
+        {{'Add' | translate}} +
+      </button>
+    </div>
+  </div>
+
+  <section class="section">
+    <label class="selection-label">{{'Have you ever been refused a U.S. Visa' | translate}}
+    </label>
+    <mat-radio-group formControlName="refusedUsVisa" (change)="onChangeRefusedVisa()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && tripInfoTab.get('refusedUsVisa').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <mat-form-field *ngIf="tripInfoTab.get('refusedUsVisa').value === 'yes'">
+    <mat-label>{{'Please Explain' | translate}}</mat-label>
+    <input matInput formControlName="refuseExplain" placeholder="{{'Please Explain' | translate}}" required />
+  </mat-form-field>
+
+  <section class="section">
+    <label class="selection-label">{{'Has anyone filed an immigration petition on your behalf?' | translate}}
+    </label>
+    <mat-radio-group formControlName="filledImmigration" (change)="onChangeImmigration()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && tripInfoTab.get('filledImmigration').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <mat-form-field *ngIf="tripInfoTab.get('filledImmigration').value === 'yes'">
+    <mat-label>{{'Please Explain' | translate}}</mat-label>
+    <input matInput formControlName="hasImmigration" placeholder="{{'Please Explain' | translate}}" required />
+  </mat-form-field>
+
+  <section class="section">
+    <label class="selection-label">{{'Have you ever had an ESTA application rejected?' | translate}}
+    </label>
+    <mat-radio-group formControlName="hadEstaRejected" (change)="onChangeEstaRejected()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && tripInfoTab.get('hadEstaRejected').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <mat-form-field *ngIf="tripInfoTab.get('hadEstaRejected').value === 'yes'">
+    <mat-label>{{'Please Explain' | translate}}</mat-label>
+    <input matInput formControlName="estaRejected" placeholder="{{'Please Explain' | translate}}" required />
+  </mat-form-field>
+
+  <section class="section">
+    <label class="selection-label">{{'Have you ever been refused entry to the United States?' | translate}}
+    </label>
+    <mat-radio-group formControlName="refusedEntryUs" (change)="onChangeRefuseEntryUs()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="isSubmit && tripInfoTab.get('refusedEntryUs').invalid">
+      {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+    </mat-error>
+  </section>
+
+  <mat-form-field *ngIf="tripInfoTab.get('refusedEntryUs').value === 'yes'">
+    <mat-label>{{'Please Explain' | translate}}</mat-label>
+    <input matInput formControlName="hasRefusedEntryUs" placeholder="{{'Please Explain' | translate}}" required />
+  </mat-form-field>
+</div>

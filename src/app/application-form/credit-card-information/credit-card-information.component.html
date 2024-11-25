@@ -1,0 +1,47 @@
+<div [formGroup]="creditInfo">
+
+  <section class="section">
+    <label class="selection-label">{{'I Will Pay In Cash' | translate}} </label>
+    <mat-radio-group formControlName="payInCash" (change)="onChangePayInCash()">
+      <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+      <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+    </mat-radio-group>
+  </section>
+
+  <div *ngIf="creditInfo.get('payInCash').value === 'no'">
+    <mat-form-field>
+      <mat-label>{{'Card Number' | translate}}</mat-label>
+      <input required matInput formControlName="cardNumber" type="tel" inputmode="numeric" autocomplete="cc-number"
+        maxlength="19" placeholder="xxxx xxxx xxxx xxxx" />
+    </mat-form-field>
+
+    <mat-label style="display: block;padding-bottom: 5px;">{{'Expiration Date' | translate}}</mat-label>
+    <mat-form-field style="width: 49%;float: left;">
+      <mat-label>{{'Month' | translate}}</mat-label>
+      <mat-select formControlName="expirationMonth">
+        <mat-option *ngFor="let month of months" [value]="month.val">{{ month.val }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field style="width: 49%;float: right;">
+      <mat-label>{{'Year' | translate}}</mat-label>
+      <mat-select formControlName="expirationYear">
+        <mat-option *ngFor="let year of years" [value]="year.val">{{ year.val }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Security Code' | translate}}</mat-label>
+      <input required matInput formControlName="securityCode" placeholder="{{'Security Code' | translate}}" type="number" />
+      <mat-hint>{{'Format: XXX (XXXX for amex), for example 555 (5555 for amex)' | translate}}</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Amount' | translate}}</mat-label>
+      <input matInput formControlName="amount" placeholder="{{'Amount' | translate}}" type="number" />
+      <mat-hint>{{'The price you will pay' | translate}}</mat-hint>
+    </mat-form-field>
+  </div>
+
+
+</div>

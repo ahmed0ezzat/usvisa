@@ -1,0 +1,559 @@
+<div [formGroup]="additionalDetailsTab">
+    <section class="section">
+        <label class="selection-label">{{'Are you currently working?' | translate}} </label>
+        <mat-radio-group required formControlName="areYouCurrentlyWorking" (change)="onChangeAreYouCurrentlyWorking()">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && additionalDetailsTab.get('areYouCurrentlyWorking').invalid">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="additionalDetailsTab.get('areYouCurrentlyWorking').value === 'no'">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Please Explain' | translate}}</mat-label>
+            <input required matInput formControlName="notWorkingExplanation"
+                placeholder="{{'Please Explain' | translate}}" />
+        </mat-form-field>
+    </div>
+
+    <div *ngIf="additionalDetailsTab.get('areYouCurrentlyWorking').value === 'yes'">
+        <mat-form-field>
+            <mat-label>{{'Primary Occupation' | translate}}</mat-label>
+            <mat-select required formControlName="workingField" (selectionChange)='onChangeWorkingField()'>
+                <mat-option *ngFor="let filed of workingFields" [value]="filed.val">
+                    {{ filed.val }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div *ngIf='additionalDetailsTab.get("workingField").value !== "Retired"'>
+            <mat-form-field class="example-full-width"
+                *ngIf="additionalDetailsTab.get('workingField').value === 'Other'">
+                <mat-label>{{'Specify Other' | translate}}</mat-label>
+                <input required matInput formControlName="otherWorkingField"
+                    placeholder="{{'Specify Other' | translate}}" required />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Name of employer' | translate}}</mat-label>
+                <input required matInput formControlName="NameOfEmployer"
+                    placeholder="{{'Name of employer' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Employer Phone Number' | translate}}</mat-label>
+                <input required matInput formControlName="employerPhoneNumber"
+                    placeholder="{{'Employer Phone Number' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Street Address 1' | translate}}</mat-label>
+                <input required matInput formControlName="employerStreetAddress1"
+                    placeholder="{{'Street Address 1' | translate}}" required />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Street Address 2' | translate}}</mat-label>
+                <input matInput formControlName="employerStreetAddress2"
+                    placeholder="{{'Street Address 2' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'City' | translate}}</mat-label>
+                <input required matInput formControlName="WorkingCity" placeholder="{{'City' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'ZIP or Postal Code' | translate}}</mat-label>
+                <input matInput formControlName="ZIPOrPostalCode" placeholder="{{'ZIP or Postal Code' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>{{'Country' | translate}}</mat-label>
+                <mat-select required formControlName="workingCountry">
+                    <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'State/Province' | translate}}</mat-label>
+                <input matInput formControlName="StateProvince" placeholder="{{'State/Province' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Start Date' | translate}}</mat-label>
+                <input (dateChange)="validateDateTime()" formControlName="workingStartDate" matInput
+                    [matDatepicker]="picker" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker> </mat-datepicker>
+                <mat-error *ngIf="additionalDetailsTab.get('workingStartDate').invalid">
+                    {{'Date cannot be equal or later than today' | translate}}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'What is your monthly income in your local currency?' | translate}}</mat-label>
+                <input type="number" [min]="1" matInput formControlName="monthlyIncome"
+                    placeholder="{{'What is your monthly income in your local currency?' | translate}}" />
+                <mat-error *ngIf="additionalDetailsTab.get('monthlyIncome').invalid">
+                    {{'Must be greater than 0' | translate}}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Please describe your duties' | translate}}</mat-label>
+                <textarea matInput required formControlName="workDutiesDescription"
+                    placeholder="{{'Please describe your duties' | translate}}"></textarea>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <section class="section">
+        <label class="selection-label">{{'Have you been previously employed?' | translate}} </label>
+        <mat-radio-group required formControlName="havePreviouslyEmployed" (change)="onChangeHavePreviouslyEmployed()">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="
+        isSubmit && additionalDetailsTab.get('havePreviouslyEmployed').invalid
+      ">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="additionalDetailsTab.get('havePreviouslyEmployed').value === 'yes'">
+        <div *ngFor="
+        let row of additionalQuestionsRelatives?.controls;
+        let index = index
+      ">
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Name of employer' | translate}}</mat-label>
+                <input required matInput [formControl]="row.get('employerName')"
+                    placeholder="{{'Name of employer' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'What was your job title in this job?' | translate}}</mat-label>
+                <input required matInput [formControl]="row.get('jobTitle')"
+                    placeholder="{{'What was your job title in this job?' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'When did you start?' | translate}}</mat-label>
+                <input [formControl]="row.get('jobStartDate')" required matInput [matDatepicker]="picker" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker> </mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'When did you leave your job?' | translate}}</mat-label>
+                <input [formControl]="row.get('jobEndDate')" required matInput [matDatepicker]="picker1" />
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1> </mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'What did your job responsibilities and duties include in this
+                    job?' | translate}}</mat-label>
+                <textarea matInput required [formControl]="row.get('jobResponsibilities')"
+                    placeholder="What did your job responsibilities and duties include in this job?"></textarea>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Supervisor Given Name' | translate}}</mat-label>
+                <input matInput [formControl]="row.get('supervisorGivenName')"
+                    placeholder="{{'Supervisor Given Name' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Supervisor Sur Name' | translate}}</mat-label>
+                <input matInput [formControl]="row.get('supervisorSurName')"
+                    placeholder="{{'Supervisor Sur Name' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>Phone</mat-label>
+                <input matInput required [formControl]="row.get('phoneNumber')" placeholder="{{'Phone' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Street Address' | translate}}</mat-label>
+                <input matInput required [formControl]="row.get('PreviousWorkStreetAddress')"
+                    placeholder="{{'Street Address' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'City' | translate}}</mat-label>
+                <input matInput required [formControl]="row.get('PreviousWorkCity')"
+                    placeholder="{{'City' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Apartment/Suite/Unit Number' | translate}}</mat-label>
+                <input matInput [formControl]="row.get('apartmentSuiteUnitNumber')"
+                    placeholder="{{'Apartment/Suite/Unit Number' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'ZIP or Postal Code' | translate}}</mat-label>
+                <input matInput [formControl]="row.get('ZIPOrPostalCode')"
+                    placeholder="{{'ZIP or Postal Code' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>{{'Country' | translate}}</mat-label>
+                <mat-select [formControl]="row.get('country')">
+                    <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'State/Province' | translate}}</mat-label>
+                <input matInput [formControl]="row.get('StateOrProvince')"
+                    placeholder="{{'State/Province' | translate}}" />
+            </mat-form-field>
+
+            <div *ngIf="additionalQuestionsRelatives?.controls.length > 1">
+                <button mat-button (click)="onChangeAdditionalQuestion(false, index)">
+                    {{'Remove' | translate}} -
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <button mat-button (click)="onChangeAdditionalQuestion(true, null)">
+                {{'Add additional job details' | translate}} +
+            </button>
+        </div>
+    </div>
+
+    <section class="section">
+        <label class="selection-label">{{'Have you attended an academic institution of high school and above?' |
+            translate}}
+        </label>
+        <mat-radio-group required formControlName="haveAttendedInstitutionAcademic"
+            (change)="onChangeHaveAttendedInstitutionAcademic()">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="
+        isSubmit &&
+        additionalDetailsTab.get('haveAttendedInstitutionAcademic').invalid
+      ">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="
+      additionalDetailsTab.get('haveAttendedInstitutionAcademic').value ===
+      'yes'
+    ">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'School Name' | translate}}</mat-label>
+            <input matInput required formControlName="highSchoolName" placeholder="{{'School Name' | translate}}" />
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'What was your course of studies?' | translate}}</mat-label>
+            <input matInput required formControlName="highSchoolCourseOfStudies"
+                placeholder="{{'What was your course of studies?' | translate}}" />
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Street Address' | translate}}</mat-label>
+            <input matInput required formControlName="highSchoolStreetAddress"
+                placeholder="{{'Street Address' | translate}}" />
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'City' | translate}}</mat-label>
+            <input matInput required formControlName="highSchoolCity" placeholder="{{'City' | translate}}" />
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'ZIP or Postal Code' | translate}}</mat-label>
+            <input matInput formControlName="highSchoolZIPOrPostalCode"
+                placeholder="{{'ZIP or Postal Code' | translate}}" />
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>{{'Country' | translate}}</mat-label>
+            <mat-select required formControlName="highSchoolCountry">
+                <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'State/Province' | translate}}</mat-label>
+            <input matInput formControlName="highSchoolStateProvince" placeholder="{{'State/Province' | translate}}" />
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Date of attendance (Start Date)' | translate}}</mat-label>
+            <input formControlName="highSchoolStartDate" matInput required [matDatepicker]="picker2" />
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2> </mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Date of attendance (End Date)' | translate}}</mat-label>
+            <input formControlName="highSchoolEndDate" matInput required [matDatepicker]="picker3" />
+            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <mat-datepicker #picker3> </mat-datepicker>
+        </mat-form-field>
+    </div>
+
+    <section class="section">
+        <label class="selection-label">{{'Have you ever served in the military?' | translate}}</label>
+        <mat-radio-group required formControlName="HaveEverServedInMilitary"
+            (change)="onChangeHaveEverServedInMilitary()">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="
+        isSubmit && additionalDetailsTab.get('HaveEverServedInMilitary').invalid
+      ">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+    <div *ngIf="additionalDetailsTab.get('HaveEverServedInMilitary').value === 'yes'">
+        <div *ngFor="let row of militaryServices?.controls; let index = index">
+            <mat-form-field>
+                <mat-label>{{'Country' | translate}}</mat-label>
+                <mat-select [formControl]="row.get('country')">
+                    <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Branch of Service' | translate}}</mat-label>
+                <input required matInput [formControl]="row.get('branchOfService')"
+                    placeholder="{{'Branch of Service' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Rank or position' | translate}}</mat-label>
+                <input required matInput [formControl]="row.get('rankOrPosition')"
+                    placeholder="{{'Rank or position' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Military Specialty' | translate}}</mat-label>
+                <input required matInput [formControl]="row.get('MilitarySpecialty')"
+                    placeholder="{{'Milliary Specialty' | translate}}" />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Service Start Date' | translate}}</mat-label>
+                <input [formControl]="row.get('serviceStartDate')" required matInput [matDatepicker]="picker1" />
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1> </mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+                <mat-label>{{'Service End Date' | translate}}</mat-label>
+                <input [formControl]="row.get('serviceEndDate')" required matInput [matDatepicker]="picker2" />
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2> </mat-datepicker>
+            </mat-form-field>
+
+            <div *ngIf="militaryServices?.controls.length > 1">
+                <button mat-button (click)="onChangeMilitaryServices(false, index)">
+                    {{'Remove' | translate}} -
+                </button>
+            </div>
+        </div>
+        <div>
+            <button mat-button (click)="onChangeMilitaryServices(true, null)">
+                {{'Add' | translate}} +
+            </button>
+        </div>
+    </div>
+
+    <section class="section">
+        <label class="selection-label">{{"Have you ever served in" | translate}}
+        </label>
+        <mat-radio-group required formControlName="haveEverInvolvedWithUnit" (change)="
+        onChangeRadioButton('haveEverInvolvedWithUnit', [
+          'haveEverInvolvedWithUnitExplanation'
+        ])
+      ">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="
+        isSubmit && additionalDetailsTab.get('haveEverInvolvedWithUnit').invalid
+      ">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="additionalDetailsTab.get('haveEverInvolvedWithUnit').value === 'yes'">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Please Explain' | translate}}</mat-label>
+            <input required matInput formControlName="haveEverInvolvedWithUnitExplanation"
+                placeholder="{{'Please Explain' | translate}}" />
+        </mat-form-field>
+    </div>
+
+    <section class="section">
+        <label class="selection-label">{{"Have you belonged to, contributed to" | translate}}
+        </label>
+        <mat-radio-group required formControlName="haveEverWorkedForOrganization" (change)="
+        onChangeRadioButton('haveEverWorkedForOrganization', [
+          'haveEverWorkedForOrganizationName'
+        ])
+      ">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="
+        isSubmit && additionalDetailsTab.get('haveEverInvolvedWithUnit').invalid
+      ">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="
+      additionalDetailsTab.get('haveEverWorkedForOrganization').value === 'yes'
+    ">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'What is the name of the organization?' | translate}}</mat-label>
+            <input required matInput formControlName="haveEverWorkedForOrganizationName"
+                placeholder="{{'What is the name of the organization?' | translate}}" />
+        </mat-form-field>
+    </div>
+
+    <section class="section">
+        <label class="selection-label">{{'Do you belong to a clan or a tribe?' | translate}} </label>
+        <mat-radio-group required formControlName="belongToClanOrTribe" (change)="
+        onChangeRadioButton('belongToClanOrTribe', ['belongToClanOrTribeName'])
+      ">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="
+        isSubmit && additionalDetailsTab.get('belongToClanOrTribe').invalid
+      ">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="additionalDetailsTab.get('belongToClanOrTribe').value === 'yes'">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'What is the name of the clan or tribe?' | translate}}</mat-label>
+            <input required matInput formControlName="belongToClanOrTribeName"
+                placeholder="{{'What is the name of the clan or tribe?' | translate}}" />
+        </mat-form-field>
+    </div>
+
+    <section class="section">
+        <label class="selection-label">{{'Have you ever been a member of the Taliban?' | translate}}
+        </label>
+        <mat-radio-group required formControlName="haveEverBeenMemberOfTaliban" (change)="
+        onChangeRadioButton('haveEverBeenMemberOfTaliban', [
+          'haveEverBeenMemberOfTalibanExplanation'
+        ])
+      ">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="
+        isSubmit &&
+        additionalDetailsTab.get('haveEverBeenMemberOfTaliban').invalid
+      ">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="
+      additionalDetailsTab.get('haveEverBeenMemberOfTaliban').value === 'yes'
+    ">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Please Explain' | translate}}</mat-label>
+            <input required matInput formControlName="haveEverBeenMemberOfTalibanExplanation"
+                placeholder="{{'Please Explain' | translate}}" />
+        </mat-form-field>
+    </div>
+
+    <section class="section">
+        <label class="selection-label">{{'Specialized skills' | translate}} </label>
+        <mat-radio-group required formControlName="specializedSkills" (change)="
+        onChangeRadioButton('specializedSkills', [
+          'specializedSkillsExplanation'
+        ])
+      ">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && additionalDetailsTab.get('specializedSkills').invalid">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="additionalDetailsTab.get('specializedSkills').value === 'yes'">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Please Explain' | translate}}</mat-label>
+            <input required matInput formControlName="specializedSkillsExplanation"
+                placeholder="{{'Please Explain' | translate}}" />
+        </mat-form-field>
+    </div>
+
+    <section class="section">
+        <label class="selection-label">{{'traveled out side in the last 5 years' | translate}}</label>
+        <mat-radio-group required formControlName="haveTraveledOutsideYourCountry" (change)="
+        onChangeRadioButton('haveTraveledOutsideYourCountry', [
+          'haveTraveledOutsideYourCountryName'
+        ])
+      ">
+            <mat-radio-button class="example-margin" value="yes">{{'Yes' | translate}}</mat-radio-button>
+            <mat-radio-button class="example-margin" value="no">{{'No' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="isSubmit && additionalDetailsTab.get('haveTraveledOutsideYourCountry').invalid">
+            {{'This field is' | translate}} <strong>{{'required' | translate}}</strong>
+        </mat-error>
+    </section>
+
+    <div *ngIf="
+      additionalDetailsTab.get('haveTraveledOutsideYourCountry').value === 'yes'
+    ">
+        <mat-form-field>
+            <mat-label>{{'Country Traveled To' | translate}}</mat-label>
+            <mat-select required formControlName="haveTraveledOutsideYourCountryName" multiple>
+                <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <p>{{'Which US embassy will you be going to for the interview?' | translate}}</p>
+    <mat-form-field>
+        <mat-label>Select Embassy</mat-label>
+        <mat-select required formControlName="selectEmbassy">
+            <mat-option *ngFor="let country of countryList" [value]="country.name">{{
+                country.name
+                }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div *ngFor="let row of spokenLanguages?.controls; let index = index">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{'Language(s) Spoken' | translate}}</mat-label>
+            <input required matInput [formControl]="row.get('language')"
+                placeholder="{{'Language(s) Spoken' | translate}}" />
+        </mat-form-field>
+        <div *ngIf="spokenLanguages?.controls.length > 1">
+            <button mat-button (click)="onChangeSpokenLanguages(false, index)">
+                {{'Remove' | translate}} -
+            </button>
+        </div>
+    </div>
+    <div>
+        <button mat-button (click)="onChangeSpokenLanguages(true, null)">
+            {{'Add' | translate}} +
+        </button>
+    </div>
+</div>

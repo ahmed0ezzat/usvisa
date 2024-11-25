@@ -1,0 +1,48 @@
+<div [formGroup]="basicInfoTab">
+    <div>
+        <span class="title">
+            {{'BASIC INFO 1/4' | translate}}
+        </span>
+        <h1>
+            {{'Personal Information' | translate}}
+        </h1>
+        <span class="sub-title">
+            {{'Specify your personal information' | translate}}
+        </span>
+        <app-personal-information [isSubmit]="isSubmit"></app-personal-information>
+    </div>
+
+    <div>
+        <br>
+        <span class="title">
+            {{'BASIC INFO 2/4' | translate}}
+        </span>
+        <h1 style="text-transform: capitalize;">
+            {{'Nationality' | translate}}
+        </h1>
+        <app-additional-nationalities [isSubmit]="isSubmit"></app-additional-nationalities>
+    </div>
+
+    <div>
+        <br>
+        <span class="title">
+           {{'BASIC INFO 3/4' | translate}}
+        </span>
+        <h1>
+            {{'About Your Parents' | translate}}
+        </h1>
+        <app-about-your-parents [isSubmit]="isSubmit"></app-about-your-parents>
+    </div>
+
+    <div>
+        <br>
+        <span class="title">
+            {{'BASIC INFO 4/4' | translate}}
+        </span>
+        <h1>
+            {{'Contact Information' | translate}}
+        </h1>
+        <app-contact-information [isSubmit]="isSubmit"></app-contact-information>
+    </div>
+
+</div>

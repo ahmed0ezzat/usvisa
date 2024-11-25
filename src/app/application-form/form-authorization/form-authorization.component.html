@@ -1,0 +1,79 @@
+<div [formGroup]="formAuthorizationTab">
+    <p class="section-title">
+        {{'In order to process your application, payment and authorization required.' | translate}}
+    </p>
+    <h1>
+        {{'Personal Information' | translate}}
+    </h1>
+    <p>
+        {{'If you are not paying for this service with your own credit card' | translate}}
+    </p>
+
+    <mat-form-field>
+        <mat-label>{{'Phone Number' | translate}}</mat-label>
+        <input required matInput formControlName="phoneNumber" placeholder="{{'Phone Number' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>{{'First Name' | translate}}</mat-label>
+        <input required matInput formControlName="firstName" placeholder="{{'First Name' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>{{'Last Name' | translate}}</mat-label>
+        <input required matInput formControlName="lastName" placeholder="{{'Last Name' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>{{'Address' | translate}}</mat-label>
+        <input required matInput formControlName="address" placeholder="{{'Address' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>{{'City' | translate}}</mat-label>
+        <input required matInput formControlName="city" placeholder="{{'City' | translate }}" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>{{'ZIP or Postal Code' | translate}}</mat-label>
+        <input required matInput formControlName="zipOrPostalCode" placeholder="{{'ZIP or Postal Code' | translate}}" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>{{'Country' | translate}}</mat-label>
+        <mat-select formControlName="country">
+          <mat-option *ngFor="let country of countryList" [value]="country.name">{{ country.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>{{'State' | translate}}</mat-label>
+        <input matInput formControlName="state" placeholder="{{'State' | translate}}" />
+    </mat-form-field>
+    <p class="section-title">
+        {{'In order to process your application, payment and authorization required.' | translate}}
+    </p>
+    <h1>
+        {{'Credit Card Information' | translate}}
+    </h1>
+    <p>
+        {{'If you are not paying for this service with your own credit card' | translate}}
+    </p>
+
+    <app-credit-card-information></app-credit-card-information>
+
+    <mat-card class="summary">
+        <h2>
+            {{'Order Summary' | translate}}
+        </h2>
+        <div class="summary-details">
+           <div> <span>{{'QTY' | translate}}</span> <strong>1</strong></div>
+           <div> <span>{{'Item' | translate}}</span> <strong>{{'Visa Application' | translate}}</strong></div>
+           <div> <span>{{'Price' | translate}}</span> 
+            <strong> 
+                {{ applicationFormService.creditCardInformation.get('amount').value && 
+                applicationFormService.creditCardInformation.get('amount').value !== '' ? 
+                applicationFormService.creditCardInformation.get('amount').value : '1240'  }} Q</strong></div>
+        </div>
+    </mat-card>
+</div>

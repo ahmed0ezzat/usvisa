@@ -1,0 +1,51 @@
+<div [formGroup]="additionalDetailsTab">
+  <mat-form-field>
+    <mat-label>{{'SEVIS ID' | translate}}</mat-label>
+    <input matInput formControlName="SEVISID" placeholder="{{'SEVIS ID' | translate}}" />
+    <mat-hint>{{'(e.g. N0123456789)' | translate}}</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'School Name' | translate}}</mat-label>
+    <input matInput formControlName="SEVISInfoSchoolName" placeholder="{{'School Name' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'Course of Study' | translate}}</mat-label>
+    <input matInput formControlName="SEVISInfoCourseOfStudy" placeholder="{{'Course of Study' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'Street Address' | translate}}</mat-label>
+    <input matInput formControlName="SEVISInfoStreetAddress" placeholder="{{'Street Address' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'City' | translate}}</mat-label>
+    <input matInput formControlName="SEVISInfoCity" placeholder="{{'City' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'Apartment/Suite/Unit Number' | translate}}</mat-label>
+    <input matInput formControlName="SEVISInfoApartmentSuiteUnitNumber" placeholder="{{'Apartment/Suite/Unit Number' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'ZIP or Postal Code' | translate}}</mat-label>
+    <input matInput formControlName="SEVISInfoZIPOrPostalCode" placeholder="{{'ZIP or Postal Code' | translate}}" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'Country' | translate}}</mat-label>
+    <mat-select formControlName="SEVISInfoCountry">
+      <mat-option *ngFor="let country of countryList" [value]="country.name">{{
+        country.name
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{'State/Province' | translate}}</mat-label>
+    <input matInput formControlName="SEVISInfoStateProvince" placeholder="{{'State/Province' | translate}}" />
+  </mat-form-field>
+</div>

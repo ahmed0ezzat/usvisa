@@ -1,0 +1,174 @@
+.logo-link {
+  position: fixed;
+  top: 20px;
+  left: 32px;
+  display: block;
+  outline: none;
+  text-decoration: none;
+  padding: 0;
+  img {
+    width: 200px;
+  }
+}
+.hide-input {
+  display: none !important;
+  position: relative;
+}
+
+.show-input {
+  display: inline !important;
+}
+
+.close-icon {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  color: white;
+  height: 30px;
+  transition: 3s ease-in-out;
+}
+
+.close-icon :hover {
+  background-color: none !important;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 111111;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+// mat-toolbar {
+//   position: sticky !important;
+//   top: 0;
+//   left: 0;
+// }
+
+mat-toolbar span {
+  font-weight: 200;
+  text-transform: uppercase;
+}
+
+.nav-spacer {
+  flex: 1 1 auto;
+}
+
+.secondary-nav {
+  text-align: center;
+  background-color: #BF0A30;
+}
+
+.secondary-nav .btn {
+  border-radius: 0 !important;
+  // height: 60px;
+  box-sizing: border-box !important;
+  text-transform: uppercase;
+  background-color: #BF0A30 !important;
+  transition: 0.5s;
+  -moz-transition: 0.5;
+  -webkit-transition: 0.5;
+}
+
+.secondary-nav .btn:hover {
+  color: #afb0ee !important;
+}
+
+#navigation {
+  text-align: center;
+}
+
+#navigation button {
+  border-radius: 0 !important;
+  height: 60px;
+  box-sizing: border-box !important;
+  text-transform: uppercase;
+  background-color: #002868 !important;
+  transition: 0.5s;
+  -moz-transition: 0.5;
+  -webkit-transition: 0.5;
+}
+
+#navigation button:hover {
+  color: #eeafb7 !important;
+}
+
+#menu-button {
+  display: none;
+}
+
+#closeMenuBTN {
+  display: none;
+}
+
+@media only screen and (max-width: 620px) {
+  #navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #002868;
+    height: 500px;
+    display: none;
+  }
+
+  #navigation button.nav-link {
+    display: block !important;
+    width: 100%;
+  }
+
+  #closeMenuBTN {
+    display: block;
+  }
+
+  #menu-button {
+    display: inline-block;
+  }
+  .logo-link {
+    position: fixed;
+    top: 40px;
+    left: 64px;
+    display: block;
+    outline: none;
+    text-decoration: none;
+    padding: 0;
+    
+    img {
+      width: 130px !important;
+    }
+  }
+}
+
+@media (max-width: 900px) and (min-width: 621px) {
+  #navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #002868;
+    height: 500px;
+    display: none;
+  }
+
+  #navigation button.nav-link {
+    display: block !important;
+    width: 100%;
+  }
+
+  #closeMenuBTN {
+    display: block;
+  }
+
+  #menu-button {
+    display: inline-block;
+  }
+  
+}
+
+.langs {
+  background: #354764;
+  padding: 5px;
+  border-radius: 4px;
+  }
